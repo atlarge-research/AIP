@@ -1,0 +1,12 @@
+*.txt
+*.db
+*.pyc
+*.pdf
+*.png
+*.gexf
+*.jpg
+*.jpeg
+tools/.ipynb_checkpoints/
+venv/
+unknown_venues_*
+.idea/

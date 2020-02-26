@@ -1,0 +1,3 @@
+[submodule "venue_mappings"]
+	path = venue_mappings
+	url = https://github.com/lfdversluis/venue_mappings
