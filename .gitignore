@@ -10,3 +10,10 @@ tools/.ipynb_checkpoints/
 venv/
 unknown_venues_*
 .idea/
+old_code/
+old_databases/
+output_keywords/
+output_queries/
+parse_requests/
+query_window.spec
+renew_data.sh
