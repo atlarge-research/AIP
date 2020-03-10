@@ -42,6 +42,7 @@ class DatabaseManager(object):
         # Create a versioning table in which we store the date of last modification and the version of the database
         self.cursor.execute('''CREATE TABLE IF NOT EXISTS properties (
                                     last_modified DATE DEFAULT (DATETIME('now')) NOT NULL,
+                                    db_schema_version INT DEFAULT 1 NOT NULL,
                                     version INT DEFAULT 0 NOT NULL
                                 );''')
 
