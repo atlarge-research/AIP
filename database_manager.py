@@ -71,7 +71,7 @@ class DatabaseManager(object):
         row = query_result.fetchone()
         if row is None:
             self.db.execute(
-                '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, (DATETIME('now'), 1))''')
+                '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, DATETIME('now'), 1)''')
             self.start_version = 1
             self.db_schema_version = 1
         else:
