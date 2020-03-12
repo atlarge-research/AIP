@@ -6,8 +6,8 @@ from lxml import etree
 from database_manager import DatabaseManager
 
 
-def parse(dblp_file):
-    database = DatabaseManager()
+def parse(dblp_file, database_path="aip.db"):
+    database = DatabaseManager(location=database_path)
 
     counter = 0  # counter for new keys.
 
