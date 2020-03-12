@@ -10,8 +10,8 @@ from venue_mappings.venue_map import VenueMapper
 
 class DatabaseManager(object):
 
-    def __init__(self):
-        self.db = sqlite3.connect('aip.db')
+    def __init__(self, location="aip.db"):
+        self.db = sqlite3.connect(location)
         self.cursor = self.db.cursor()
         self.setup_db()
         self.update_database()
