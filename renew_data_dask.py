@@ -1,9 +1,10 @@
 import os
+import shutil
 from os.path import isfile
 
 import dask.dataframe as dd
 from dask.delayed import delayed
-from dask.distributed import Client, get_worker
+from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
 
 import parse_aminer
@@ -17,7 +18,6 @@ cluster = SLURMCluster(cores=number_of_cores_per_node, memory="64 GB", processes
                        local_directory="./aip-logs", interface='ib0', walltime=reservation_length)
 
 file_locations = "/var/scratch/atlarge/aip_data"
-local_database_location = "/tmp/aip.db"
 
 data_files = []
 
@@ -29,17 +29,18 @@ for path, subdirs, files in os.walk(file_locations):
 
 
 def process_file(path):
+    h = hash(path)  # Use the hash of the node name as database file.
+    tmp_path = os.path.join("/tmp/aiptmp/{}.db".format(h))
     if "dblp" in path:
-        parse_dblp.parse(path, local_database_location)
+        parse_dblp.parse(path, tmp_path)
     elif "s2-corpus" in path:
-        parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, local_database_location)
+        parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, tmp_path)
     elif "aminer" in path:
-        parse_aminer.parse_aminer_corpus_file(path, local_database_location)
+        parse_aminer.parse_aminer_corpus_file(path, tmp_path)
 
 
 def copy_database_to_home_folder():
-    h = hash(get_worker())  # Use the hash of the node name as database file.
-    os.rename(local_database_location, "~/{}.db".format(h))
+    shutil.move("/tmp/aiptmp/*.db", "~/aiptmp/")
 
 
 # Grab 5 execution nodes -> 80 cores
@@ -62,8 +63,10 @@ database_manager = DatabaseManager()  # This creates an empty aip.db if it doesn
 con3 = database_manager.db  # Reuse the connection
 
 # based on https://stackoverflow.com/a/37138506
-for worker in cluster.workers:  # For each worker, copy all the data
-    con3.execute("ATTACH '{}.db' as dba".format(hash(worker)))
+db_files_location = "~/aiptmp/"
+for file in [os.path.join(db_files_location, f) for f in os.listdir(db_files_location) if
+             isfile(os.path.join(db_files_location, f)) and f.endswith(".db")]:
+    con3.execute("ATTACH '{}' as dba".format(file))
 
     con3.execute("BEGIN")
     for row in con3.execute("SELECT * FROM dba.sqlite_master WHERE type='table'"):
