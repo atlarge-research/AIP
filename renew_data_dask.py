@@ -31,11 +31,11 @@ for path, subdirs, files in os.walk(file_locations):
 def process_file(path):
     h = hash(path)  # Use the hash of the node name as database file.
     tmp_path = os.path.join("/tmp/aiptmp/{}.db".format(h))
-    if "dblp" in path:
+    if "dblp.xml" in path:
         parse_dblp.parse(path, tmp_path)
     elif "s2-corpus" in path:
         parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, tmp_path)
-    elif "aminer" in path:
+    elif "aminer_papers" in path:
         parse_aminer.parse_aminer_corpus_file(path, tmp_path)
 
 
