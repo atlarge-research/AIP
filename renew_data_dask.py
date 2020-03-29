@@ -1,3 +1,4 @@
+import asyncio
 import os
 import shutil
 from os.path import isfile
@@ -43,40 +44,46 @@ def copy_database_to_home_folder():
     shutil.move("/tmp/aiptmp/*.db", "~/aiptmp/")
 
 
-# Grab 5 execution nodes -> 80 cores
-cluster.scale_up(5)
-client = Client(cluster)
+async def run():
+    # Grab 5 execution nodes -> 80 cores
+    cluster.scale_up(5)
+    client = Client(cluster)
 
-# Create one task per file.
-tasks = list(map(delayed(process_file), data_files))
-true_false_array = dd.from_delayed(tasks)
-if False not in true_false_array:  # If everything went alright, let all nodes copy their databases to the home folder.
-    client.run(copy_database_to_home_folder())
-else:
-    print("Parsing one of the files went horribly wrong, quitting!")
-    exit(-1)
+    # Create one task per file.
+    tasks = list(map(delayed(process_file), data_files))
+    true_false_array = dd.from_delayed(tasks)
+    if False not in true_false_array:  # If everything went alright, let all nodes copy their databases to the home folder.
+        client.run(copy_database_to_home_folder())
+    else:
+        print("Parsing one of the files went horribly wrong, quitting!")
+        exit(-1)
 
-# Now, each of the nodes has a local database file, we will now combine these databases into one.
-# We do this process sequentially, because we are not sure yet if SQLite likes it if all nodes do this in parallel.
-# TODO: test if we can do this procedure in each node through the copy_database_to_home_folder, would save copying data
-database_manager = DatabaseManager()  # This creates an empty aip.db if it doesn't exists.
-con3 = database_manager.db  # Reuse the connection
+    # Now, each of the nodes has a local database file, we will now combine these databases into one.
+    # We do this process sequentially, because we are not sure yet if SQLite likes it if all nodes do this in parallel.
+    # TODO: test if we can do this procedure in each node through the copy_database_to_home_folder, would save copying data
+    database_manager = DatabaseManager()  # This creates an empty aip.db if it doesn't exists.
+    con3 = database_manager.db  # Reuse the connection
 
-# based on https://stackoverflow.com/a/37138506
-db_files_location = "~/aiptmp/"
-for file in [os.path.join(db_files_location, f) for f in os.listdir(db_files_location) if
-             isfile(os.path.join(db_files_location, f)) and f.endswith(".db")]:
-    con3.execute("ATTACH '{}' as dba".format(file))
+    # based on https://stackoverflow.com/a/37138506
+    db_files_location = "~/aiptmp/"
+    for file in [os.path.join(db_files_location, f) for f in os.listdir(db_files_location) if
+                 isfile(os.path.join(db_files_location, f)) and f.endswith(".db")]:
+        con3.execute("ATTACH '{}' as dba".format(file))
 
-    con3.execute("BEGIN")
-    for row in con3.execute("SELECT * FROM dba.sqlite_master WHERE type='table'"):
-        combine = "INSERT INTO " + row[1] + " SELECT * FROM dba." + row[1]
-        print(combine)
-        con3.execute(combine)
-    con3.execute("detach database dba")
-    con3.commit()
-    # Now, delete the database as it has been copied.
-    # os.remove("{}.db".format(hash(worker)))
+        con3.execute("BEGIN")
+        for row in con3.execute("SELECT * FROM dba.sqlite_master WHERE type='table'"):
+            combine = "INSERT INTO " + row[1] + " SELECT * FROM dba." + row[1]
+            print(combine)
+            con3.execute(combine)
+        con3.execute("detach database dba")
+        con3.commit()
+        # Now, delete the database as it has been copied.
+        # os.remove("{}.db".format(hash(worker)))
 
-# Release the nodes
-await cluster.scale_down(cluster.workers)
+    # Release the nodes
+    await cluster.scale_down(cluster.workers)
+
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(run())
+    loop.close()
