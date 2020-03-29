@@ -3,6 +3,7 @@ import os
 import shutil
 from os.path import isfile
 
+import dask
 import dask.dataframe as dd
 from dask.delayed import delayed
 from dask.distributed import Client
@@ -18,7 +19,7 @@ reservation_length = "02:00:00"  # 2 hours is more than enough... probably
 cluster = SLURMCluster(cores=number_of_cores_per_node, memory="64 GB", processes=number_of_cores_per_node,
                        local_directory="./aip-logs", interface='ib0', walltime=reservation_length)
 
-file_locations = "/var/scratch/atlarge/aip_data"
+file_locations = "/var/scratch/lvs215/aip_tmp"
 
 data_files = []
 
@@ -28,7 +29,7 @@ for path, subdirs, files in os.walk(file_locations):
         if isfile(os.path.join(path, name)) and not name.endswith(("gz", "zip", "tar")):
             data_files.append(os.path.join(path, name))
 
-
+@dask.delayed
 def process_file(path):
     h = hash(path)  # Use the hash of the node name as database file.
     tmp_path = os.path.join("/tmp/aiptmp/{}.db".format(h))
@@ -51,7 +52,7 @@ async def run():
 
     # Create one task per file.
     tasks = list(map(delayed(process_file), data_files))
-    true_false_array = dd.from_delayed(tasks)
+    true_false_array = dd.compute(*tasks)
     if False not in true_false_array:  # If everything went alright, let all nodes copy their databases to the home folder.
         client.run(copy_database_to_home_folder())
     else:
@@ -66,6 +67,7 @@ async def run():
 
     # based on https://stackoverflow.com/a/37138506
     db_files_location = "~/aiptmp/"
+    os.makedirs(db_files_location, exist_ok=True)
     for file in [os.path.join(db_files_location, f) for f in os.listdir(db_files_location) if
                  isfile(os.path.join(db_files_location, f)) and f.endswith(".db")]:
         con3.execute("ATTACH '{}' as dba".format(file))
