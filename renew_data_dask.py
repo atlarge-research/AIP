@@ -4,11 +4,10 @@ import shutil
 from os.path import isfile
 
 import dask
-import dask.dataframe as dd
+import dask.bag as db
 from dask.delayed import delayed
 from dask.distributed import Client
 from dask_jobqueue import SLURMCluster
-import numpy as np
 
 import parse_aminer
 import parse_dblp
@@ -21,13 +20,13 @@ def process_file(path):
     tmp_path = os.path.join("/tmp/aiptmp/{}.db".format(h))
     os.makedirs("/tmp/aiptmp", exist_ok=True)
     if "dblp.xml" in path:
-        return parse_dblp.parse(path, tmp_path)
+        return [parse_dblp.parse(path, tmp_path)]
     elif "s2-corpus" in path:
-        return parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, tmp_path)
+        return [parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, tmp_path)]
     elif "aminer_papers" in path:
-        return parse_aminer.parse_aminer_corpus_file(path, tmp_path)
+        return [parse_aminer.parse_aminer_corpus_file(path, tmp_path)]
 
-    return True  # Nothing that should be done.
+    return [True]  # Nothing that should be done.
 
 def copy_database_to_home_folder():
     shutil.move("/tmp/aiptmp/*.db", "/home/lvs215/aiptmp/")
@@ -36,7 +35,7 @@ def copy_database_to_home_folder():
 async def run():
     number_of_cores_per_node = 16  # DAS-5 features 2x8 NUMA cores per compute node
     reservation_length = "02:00:00"  # 2 hours is more than enough... probably
-    cluster = SLURMCluster(cores=number_of_cores_per_node, memory="64 GB", processes=number_of_cores_per_node,
+    cluster = SLURMCluster(cores=number_of_cores_per_node, memory="64 GB", processes=4,
                            local_directory="./aip-logs", interface='ib0', walltime=reservation_length)
 
     # Grab 5 execution nodes -> 80 cores
@@ -45,7 +44,6 @@ async def run():
     client = Client(cluster)
 
     try:
-
         print("Client is ready, parsing data files...")
 
         file_locations = "/var/scratch/lvs215/aip_tmp"
@@ -61,9 +59,9 @@ async def run():
         print(data_files)
         print("Creating and executing tasks...")
         tasks = list(map(delayed(process_file), data_files))
-        true_false_array = dd.from_delayed(tasks, meta={
-            "success": np.bool,
-        })
+        true_false_array = db.from_delayed(tasks)
+        # Time to compute them!
+        true_false_array.compute()
         print("Tasks ran to completion! Copying databases.")
         if False not in true_false_array:  # If everything went alright, let all nodes copy their databases to the home dir.
             client.run(copy_database_to_home_folder())
