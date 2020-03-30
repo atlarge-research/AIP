@@ -6,7 +6,7 @@ from os.path import isfile
 import dask
 import dask.bag as db
 from dask.delayed import delayed
-from dask.distributed import Client
+from dask.distributed import Client, Lock, get_worker
 from dask_jobqueue import SLURMCluster
 
 import parse_aminer
@@ -16,17 +16,23 @@ from database_manager import DatabaseManager
 
 @dask.delayed
 def process_file(path):
-    h = hash(path)  # Use the hash of the node name as database file.
-    tmp_path = os.path.join("/tmp/aiptmp/{}.db".format(h))
-    os.makedirs("/tmp/aiptmp", exist_ok=True)
-    if "dblp.xml" in path:
-        return [parse_dblp.parse(path, tmp_path)]
-    elif "s2-corpus" in path:
-        return [parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, tmp_path)]
-    elif "aminer_papers" in path:
-        return [parse_aminer.parse_aminer_corpus_file(path, tmp_path)]
+    lock = Lock(str(hash(get_worker())))
+    lock.acquire()
+    try:
+        h = hash(path)  # Use the hash of the node name as database file.
+        tmp_path = os.path.join("/tmp/aiptmp/{}.db".format(h))
+        os.makedirs("/tmp/aiptmp", exist_ok=True)
+        if "dblp.xml" in path:
+            return [parse_dblp.parse(path, tmp_path)]
+        elif "s2-corpus" in path:
+            return [parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, tmp_path)]
+        elif "aminer_papers" in path:
+            return [parse_aminer.parse_aminer_corpus_file(path, tmp_path)]
 
-    return [True]  # Nothing that should be done.
+        return [True]  # Nothing that should be done.
+    finally:
+        lock.release()
+
 
 def copy_database_to_home_folder():
     shutil.move("/tmp/aiptmp/*.db", "/home/lvs215/aiptmp/")
