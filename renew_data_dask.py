@@ -21,12 +21,13 @@ def process_file(path):
     tmp_path = os.path.join("/tmp/aiptmp/{}.db".format(h))
     os.makedirs("/tmp/aiptmp", exist_ok=True)
     if "dblp.xml" in path:
-        parse_dblp.parse(path, tmp_path)
+        return parse_dblp.parse(path, tmp_path)
     elif "s2-corpus" in path:
-        parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, tmp_path)
+        return parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, tmp_path)
     elif "aminer_papers" in path:
-        parse_aminer.parse_aminer_corpus_file(path, tmp_path)
+        return parse_aminer.parse_aminer_corpus_file(path, tmp_path)
 
+    return True  # Nothing that should be done.
 
 def copy_database_to_home_folder():
     shutil.move("/tmp/aiptmp/*.db", "/home/lvs215/aiptmp/")
