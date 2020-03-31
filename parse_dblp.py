@@ -7,7 +7,6 @@ from database_manager import DatabaseManager
 
 
 def parse(dblp_file, database_path="aip.db"):
-    try:
         database = DatabaseManager(location=database_path)
 
         counter = 0  # counter for new keys.
@@ -77,10 +76,9 @@ def parse(dblp_file, database_path="aip.db"):
 
             element.clear()
 
-        # database.flush_missing_venues()
+            # database.flush_missing_venues()
+        database.close()
         return True
-    except:
-        return False
 
 if __name__ == '__main__':
     xml_file = "/media/lfdversluis/datastore/dblp_2019-01-23.xml"

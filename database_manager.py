@@ -19,6 +19,9 @@ class DatabaseManager(object):
         self.run_date_string = '{0:%Y-%m-%d_%H-%M-%S}'.format(datetime.now())
         self.unknown_venue_dict = dict()
         self.venue_mapper = VenueMapper()
+        
+    def close(self):
+        self.db.close()
 
     def setup_db(self):
         self.cursor = self.db.cursor()

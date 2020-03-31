@@ -7,7 +7,6 @@ from util import iterload_file_lines
 
 
 def parse_semantic_scholar_corpus_file(path, database_path="aip.db"):
-    try:
         database = DatabaseManager(location=database_path)
         with open(path, "r", encoding="ISO-8859-1") as json_file:
             # print(corpus_file)
@@ -52,9 +51,8 @@ def parse_semantic_scholar_corpus_file(path, database_path="aip.db"):
                                                 year=publication_year, volume=publication_journal_volume,
                                                 num_citations=num_citations)
         # database.flush_missing_venues()
+        database.close()
         return True
-    except:
-        return False
 
 
 def parse(corpus_location):
