@@ -1,4 +1,5 @@
 import ast
+import gzip
 import json
 import logging
 from json.decoder import WHITESPACE
@@ -36,15 +37,30 @@ def iterload(string_or_fp, cls=json.JSONDecoder, **kwargs):
             idx = WHITESPACE.match(string, end).end()
 
 
-def iterload_file_lines(file):
-    for line in file.readlines():
-        try:
-            json_object = orjson.loads(line)
-            yield json_object
-        except Exception as e:
+def iterload_file_lines(path):
+    with open(path, "r", encoding='ISO-8859-1') as json_file:
+        for line in json_file.readlines():
             try:
-                json_object = ast.literal_eval(line)
+                json_object = orjson.loads(line)
                 yield json_object
-            except Exception as e2:
-                logger.warning("Could not parse line: %s. Errors: %s and: %s", line, e, e2)
-                continue
+            except Exception as e:
+                try:
+                    json_object = ast.literal_eval(line)
+                    yield json_object
+                except Exception as e2:
+                    logger.warning("Could not parse line: %s. Errors: %s and: %s", line, e, e2)
+                    continue
+
+
+def iterload_file_lines_gzip(gz_file):
+    with gzip.open(gz_file, encoding="ISO-8859-1") as f:
+        for line in f.readlines():
+            try:
+                json_object = orjson.loads(line)
+                yield json_object
+            except:
+                try:
+                    json_object = ast.literal_eval(line)
+                    yield json_object
+                except:
+                    continue
