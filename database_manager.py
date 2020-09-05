@@ -4,8 +4,7 @@ from datetime import date, datetime
 import lxml
 import lxml.html
 import lxml.html.clean
-
-from venue_mappings.venue_map import VenueMapper
+from venue_mapper.venue_mapper import VenueMapper
 
 
 class DatabaseManager(object):
