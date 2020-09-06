@@ -54,7 +54,7 @@ def iterload_file_lines(path):
 
 def iterload_file_lines_gzip(gz_file):
     with gzip.open(gz_file, mode='rt', encoding="ISO-8859-1") as f:
-        for line in f.readlines():
+        for line in f:
             try:
                 json_object = orjson.loads(line)
                 yield json_object
