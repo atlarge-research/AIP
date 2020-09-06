@@ -39,7 +39,7 @@ def iterload(string_or_fp, cls=json.JSONDecoder, **kwargs):
 
 def iterload_file_lines(path):
     with open(path, "r", encoding='ISO-8859-1') as json_file:
-        for line in json_file.readlines():
+        for line in json_file:
             try:
                 json_object = orjson.loads(line)
                 yield json_object

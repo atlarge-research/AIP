@@ -10,70 +10,68 @@ from venue_mapper.venue_mapper import VenueMapper
 class DatabaseManager(object):
 
     def __init__(self, location="aip.db"):
-        self.db = sqlite3.connect(location)
-        self.cursor = self.db.cursor()
+        self.db = sqlite3.connect(location, timeout=120.0)
         self.setup_db()
         self.update_database()
         self.did_up_version = False
         self.run_date_string = '{0:%Y-%m-%d_%H-%M-%S}'.format(datetime.now())
         self.unknown_venue_dict = dict()
         self.venue_mapper = VenueMapper()
-        
+
     def close(self):
         self.db.close()
 
     def setup_db(self):
-        self.cursor = self.db.cursor()
         # Create the publication table
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS publications
-                        (id VARCHAR(64) NOT NULL,
-                        venue VARCHAR(16),
-                        year INTEGER,
-                        volume VARCHAR(8),
-                        title VARCHAR(512),
-                        doi VARCHAR(128),
-                        abstract TEXT,
-                        PRIMARY KEY (id)
-                        );''')
+        with self.db:
+            self.db.execute('''CREATE TABLE IF NOT EXISTS publications
+                            (id VARCHAR(64) NOT NULL,
+                            venue VARCHAR(16),
+                            year INTEGER,
+                            volume VARCHAR(8),
+                            title VARCHAR(512),
+                            doi VARCHAR(128),
+                            abstract TEXT,
+                            PRIMARY KEY (id)
+                            );''')
 
-        # Insert Create a cites table linking paper -> another paper it cites per row
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS cites
-                                (paper_id VARCHAR(64) NOT NULL,
-                                cited_paper_id VARCHAR(64) NOT NULL);''')
+            # Insert Create a cites table linking paper -> another paper it cites per row
+            self.db.execute('''CREATE TABLE IF NOT EXISTS cites
+                                    (paper_id VARCHAR(64) NOT NULL,
+                                    cited_paper_id VARCHAR(64) NOT NULL);''')
 
-        # Create a versioning table in which we store the date of last modification and the version of the database
-        self.cursor.execute('''CREATE TABLE IF NOT EXISTS properties (
-                                    last_modified DATE DEFAULT (DATETIME('now')) NOT NULL,
-                                    db_schema_version INT DEFAULT 1 NOT NULL,
-                                    version INT DEFAULT 0 NOT NULL
-                                );''')
+            # Create a versioning table in which we store the date of last modification and the version of the database
+            self.db.execute('''CREATE TABLE IF NOT EXISTS properties (
+                                        last_modified DATE DEFAULT (DATETIME('now')) NOT NULL,
+                                        db_schema_version INT DEFAULT 1 NOT NULL,
+                                        version INT DEFAULT 0 NOT NULL
+                                    );''')
 
-        # Create a compound index on this table to speed up looking things up.
-        self.cursor.execute('''CREATE UNIQUE INDEX IF NOT EXISTS paper_cite_pair
-                        ON cites (paper_id, cited_paper_id);''')
+            # Create a compound index on this table to speed up looking things up.
+            self.db.execute('''CREATE UNIQUE INDEX IF NOT EXISTS paper_cite_pair
+                            ON cites (paper_id, cited_paper_id);''')
 
-        # Create indices on title, abstract, and venue which are often searched on
-        self.cursor.execute('''CREATE INDEX IF NOT EXISTS ind_title
-                                ON publications (title);''')
+            # Create indices on title, abstract, and venue which are often searched on
+            self.db.execute('''CREATE INDEX IF NOT EXISTS ind_title
+                                    ON publications (title);''')
 
-        self.cursor.execute('''CREATE INDEX IF NOT EXISTS ind_abstract
-                                ON publications (abstract);''')
+            self.db.execute('''CREATE INDEX IF NOT EXISTS ind_abstract
+                                    ON publications (abstract);''')
 
-        self.cursor.execute('''CREATE INDEX IF NOT EXISTS ind_venue
-                                ON publications (venue);''')
+            self.db.execute('''CREATE INDEX IF NOT EXISTS ind_venue
+                                    ON publications (venue);''')
 
-        self.cursor.execute('''CREATE INDEX IF NOT EXISTS ind_doi
-                                ON publications (doi);''')
+            self.db.execute('''CREATE INDEX IF NOT EXISTS ind_doi
+                                    ON publications (doi);''')
 
-        # Save (commit) the changes
-        self.db.commit()
         query = "SELECT version, db_schema_version FROM properties"
         query_result = self.db.execute(query)
 
         row = query_result.fetchone()
         if row is None:
-            self.db.execute(
-                '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, DATETIME('now'), 1)''')
+            with self.db:
+                self.db.execute(
+                    '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, DATETIME('now'), 1)''')
             self.start_version = 1
             self.db_schema_version = 1
         else:
@@ -87,41 +85,40 @@ class DatabaseManager(object):
         if self.db_schema_version < 2:
             # We set the default amount of citations to -1, indicating an invalid number since we simply don't know
             # Setting it to 0 can cause confusion: is it actually 0 or do we simply don't know?
-            self.cursor.execute("ALTER TABLE publications ADD COLUMN n_citations INTEGER NOT NULL default -1")
+            with self.db:
+                self.db.execute("ALTER TABLE publications ADD COLUMN n_citations INTEGER NOT NULL default -1")
 
-            # Create a table linking author ids to article ids
-            self.cursor.execute('''CREATE TABLE IF NOT EXISTS authors(
-                                    id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                    name VARCHAR(64) NOT NULL,
-                                    orcid VARCHAR(32)
-                                );''')
-
-            # Create an index on the author id to speed things up when searching/joining.
-            self.cursor.execute('''CREATE INDEX IF NOT EXISTS ind_author_id ON authors (id);''')
-
-            # Create a table linking author ids to article ids
-            self.cursor.execute('''CREATE TABLE IF NOT EXISTS author_paper_pairs(
-                                        author_id VARCHAR(64) NOT NULL,
-                                        paper_id VARCHAR(64) NOT NULL
+                # Create a table linking author ids to article ids
+                self.db.execute('''CREATE TABLE IF NOT EXISTS authors(
+                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                        name VARCHAR(64) NOT NULL,
+                                        orcid VARCHAR(32)
                                     );''')
 
-            # Create a compound index on this table to speed up looking things up.
-            self.cursor.execute('''CREATE UNIQUE INDEX IF NOT EXISTS author_paper_pair
-                                    ON author_paper_pairs (author_id, paper_id);''')
+                # Create an index on the author id to speed things up when searching/joining.
+                self.db.execute('''CREATE INDEX IF NOT EXISTS ind_author_id ON authors (id);''')
 
-            self.db_schema_version = 2
-            self.cursor.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
+                # Create a table linking author ids to article ids
+                self.db.execute('''CREATE TABLE IF NOT EXISTS author_paper_pairs(
+                                            author_id VARCHAR(64) NOT NULL,
+                                            paper_id VARCHAR(64) NOT NULL
+                                        );''')
+
+                # Create a compound index on this table to speed up looking things up.
+                self.db.execute('''CREATE UNIQUE INDEX IF NOT EXISTS author_paper_pair
+                                        ON author_paper_pairs (author_id, paper_id);''')
+
+                self.db_schema_version = 2
+                self.db.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
 
         if self.db_schema_version < 3:
-            # Create an index on the author id to speed things up when searching/joining.
-            self.cursor.execute('''CREATE INDEX IF NOT EXISTS ind_author_name ON authors (name);''')
-            self.cursor.execute('''CREATE INDEX IF NOT EXISTS ind_author_orcid ON authors (orcid);''')
+            with self.db:
+                # Create an index on the author id to speed things up when searching/joining.
+                self.db.execute('''CREATE INDEX IF NOT EXISTS ind_author_name ON authors (name);''')
+                self.db.execute('''CREATE INDEX IF NOT EXISTS ind_author_orcid ON authors (orcid);''')
 
-            self.db_schema_version = 3
-            self.cursor.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
-
-            # Save (commit) the changes
-            self.db.commit()
+                self.db_schema_version = 3
+                self.db.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
 
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
         title = self.sanitize_string(title)
@@ -175,14 +172,14 @@ class DatabaseManager(object):
             succeeded = True
             if len(row[0]) == 0 and len(abstract) > 0:
                 query = "UPDATE publications set abstract = ? WHERE doi = ?"
-                self.cursor.execute(query, [abstract, doi])
-                self.db.commit()
+                with self.db:
+                    self.db.execute(query, [abstract, doi])
                 data_modified = True
 
             if row[1] < num_citations:
                 query = "UPDATE publications set n_citations = ? WHERE doi = ?"
-                self.cursor.execute(query, [num_citations, doi])
-                self.db.commit()
+                with self.db:
+                    self.db.execute(query, [num_citations, doi])
                 data_modified = True
 
         return succeeded, data_modified
@@ -193,7 +190,7 @@ class DatabaseManager(object):
             return True, False
 
         query = "SELECT count(*) FROM publications WHERE title like ?"
-        query_result = self.cursor.execute(query, [title])
+        query_result = self.db.execute(query, [title])
         match_count = query_result.fetchone()[0]
 
         if match_count == 0:
@@ -201,7 +198,7 @@ class DatabaseManager(object):
 
         if match_count == 1:
             query = "SELECT abstract, doi, n_citations FROM publications WHERE title like ?"
-            query_result = self.cursor.execute(query, [title])
+            query_result = self.db.execute(query, [title])
             row = query_result.fetchone()
 
             # Check if the abstract (index 0) and DOI (index 1) are filled in
@@ -232,8 +229,8 @@ class DatabaseManager(object):
             arguments.append(title)
 
             query = "UPDATE publications SET {0} WHERE title like ?".format(query_part)
-            self.cursor.execute(query, arguments)
-            self.db.commit()
+            with self.db:
+                self.db.execute(query, arguments)
         elif match_count > 1:
             # Multiple articles with the exact same title? Well then... best effort based on venue and year
             query = "UPDATE publications set abstract = ?, n_citations = ?{0} WHERE title like ? AND venue = ? and year = ? and volume = ?".format(
@@ -248,20 +245,20 @@ class DatabaseManager(object):
             # re-submitted articles which contained errors, we ignore these cases as we then need to filter by issue
             # which lacks in the semantic scholar data.
             try:
-                self.cursor.execute(query, arguments)
+                with self.db:
+                    self.db.execute(query, arguments)
             except Exception as ex:
                 print(ex)
                 print(query, arguments)
-            self.db.commit()
 
         return True, True  # Succeed and modified data
 
     def insert_new_article(self, id, title, abstract, doi, venue, year, volume, num_citations):
         # We cannot update an existing row, so we assume this is a new entry.
-        self.cursor.execute(
-            "INSERT OR IGNORE INTO publications (id, venue, year, volume, title, doi, abstract, n_citations) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
-            (id, venue, year, volume, title, doi, abstract, num_citations))
-        self.db.commit()
+        with self.db:
+            self.db.execute(
+                "INSERT OR IGNORE INTO publications (id, venue, year, volume, title, doi, abstract, n_citations) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+                (id, venue, year, volume, title, doi, abstract, num_citations))
 
     def add_authors_for_article(self, authors, article_id):
         """
@@ -272,35 +269,36 @@ class DatabaseManager(object):
         for name, orcid in authors:
             author_id = None
             if orcid is not None:
-                query_result = self.cursor.execute("SELECT id from authors where orcid = ?", [orcid]).fetchone()
+                query_result = self.db.execute("SELECT id from authors where orcid = ?", [orcid]).fetchone()
                 if query_result is not None:
                     author_id = query_result[0]
 
             if author_id is None:  # Try to match by name
-                query_result = self.cursor.execute("SELECT id from authors where name = ?", [name]).fetchone()
+                query_result = self.db.execute("SELECT id from authors where name = ?", [name]).fetchone()
                 if query_result is not None:
                     author_id = query_result[0]
                 else:
-                    self.cursor.execute('INSERT INTO authors (id, name, orcid) VALUES (?,?,?)',
-                                        (None, name, orcid))
-                    author_id = self.cursor.lastrowid
+                    with self.db:
+                        cursor = self.db.execute('INSERT INTO authors (id, name, orcid) VALUES (?,?,?)',
+                                                 (None, name, orcid))
+                        author_id = cursor.lastrowid
 
             # Now, insert the author, article id pair.
-            query_result = self.cursor.execute(
+            query_result = self.db.execute(
                 "SELECT author_id from author_paper_pairs WHERE author_id = ? AND paper_id = ?",
                 [author_id, article_id]).fetchone()
             if not query_result:  # Entry doesn't exist, so add it.
-                self.cursor.execute('INSERT INTO author_paper_pairs (author_id, paper_id) VALUES (?,?)',
+                with self.db:
+                    self.db.execute('INSERT INTO author_paper_pairs (author_id, paper_id) VALUES (?,?)',
                                     (author_id, article_id))
-
-        self.db.commit()
 
     def update_version_and_date(self):
         if self.did_up_version:
             return
 
-        self.cursor.execute("UPDATE properties SET version = version + 1, last_modified = ?", [date.today()])
-        self.did_up_version = True
+        with self.db:
+            self.db.execute("UPDATE properties SET version = version + 1, last_modified = ?", [date.today()])
+            self.did_up_version = True
 
     def flush_missing_venues(self):
         sorted_dict = [(k, self.unknown_venue_dict[k]) for k in
