@@ -1,4 +1,5 @@
 import os
+import re
 from os.path import isfile
 
 import multiprocessing
@@ -11,7 +12,7 @@ import parse_semantic_scholar
 
 
 def process_file(path, db_file="aip.db"):
-    if "dblp.xml" in path:
+    if re.match(".*dblp[\w-]+\.xml", path):
         return parse_dblp.parse(path, db_file)
     elif "s2-corpus" in path:
         return parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, db_file)
@@ -23,7 +24,7 @@ def process_file(path, db_file="aip.db"):
 
 def run():
     num_cores = multiprocessing.cpu_count()
-    file_locations = "D:/raw-vanue-data-csur-survey/ss-2019-11-01"
+    file_locations = "D:/raw-venue-data-fgcs-survey"
     # We are processing dblp first as they have author information and a nice identifier. This is just a preference
     # and the articles can be parsed in no particular order, yet as we do not override an id, the final id in the
     # database will differ based on which entry of the same article gets scanned first.
@@ -35,20 +36,24 @@ def run():
         for name in files:
             if isfile(os.path.join(path, name)) and not name.endswith(("zip", "tar")):
                 file_path = os.path.join(path, name)
-                if "dblp.xml" in path:
+                if re.match("dblp[\w-]+\.xml", name):
                     dblp_file = file_path
                 else:
                     other_data_files.append(file_path)
 
     # Create one task per file.
     print("Processing DBLP first...")
-    if dblp_file is None or not process_file(dblp_file):
+    if dblp_file is None:
+        print("DBLP path is empty")
+        exit(-1)
+
+    if not process_file(dblp_file):
         print("Error during parsing DBLP file {}".format(dblp_file))
         exit(-1)
 
     # Create one task per file.
     input_list = tqdm(other_data_files)
-    processed_list = Parallel(n_jobs=num_cores)(delayed(process_file)(input_list))
+    processed_list = Parallel(n_jobs=num_cores)(delayed(process_file)(i) for i in input_list)
     if False in processed_list:
         print("Parsing one of the files went wrong! Please check output")
         exit(-1)
