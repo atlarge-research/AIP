@@ -12,6 +12,11 @@ logger = logging.getLogger(__name__)
 def parse_aminer_corpus_file(path, database_path="aip.db", logger_disabled=False):
     logger.disabled = logger_disabled
     database = DatabaseManager(location=database_path)
+
+    hash, parsed = database.did_parse_file(path)
+    if parsed:
+        return True
+
     # print(path)
     # The json files contain stacked json objects, which is bad practice.
     # It should be wrapped in a JSON array.
@@ -62,6 +67,7 @@ def parse_aminer_corpus_file(path, database_path="aip.db", logger_disabled=False
                                         year=publication_year, volume=publication_journal_volume,
                                         num_citations=citation_count)
     # database.flush_missing_venues()
+    database.add_parsed_file(hash)
     database.close()
     return True
 

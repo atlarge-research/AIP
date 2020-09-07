@@ -8,6 +8,11 @@ from util import iterload_file_lines, iterload_file_lines_gzip
 
 def parse_semantic_scholar_corpus_file(path, database_path="aip.db"):
         database = DatabaseManager(location=database_path)
+
+        hash, parsed = database.did_parse_file(path)
+        if parsed:
+            return True
+
         file_iterator_func = iterload_file_lines_gzip if path.endswith("gz") else iterload_file_lines
         # print(corpus_file)
         # The json files contain stacked json objects, which is bad practice. It should be wrapped in a JSON array.
@@ -51,6 +56,7 @@ def parse_semantic_scholar_corpus_file(path, database_path="aip.db"):
                                             year=publication_year, volume=publication_journal_volume,
                                             num_citations=num_citations)
         # database.flush_missing_venues()
+        database.add_parsed_file(hash)
         database.close()
         return True
 

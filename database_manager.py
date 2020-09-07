@@ -4,6 +4,7 @@ from datetime import date, datetime
 import lxml
 import lxml.html
 import lxml.html.clean
+import xxhash
 from venue_mapper.venue_mapper import VenueMapper
 
 
@@ -118,6 +119,16 @@ class DatabaseManager(object):
                 self.db.execute('''CREATE INDEX IF NOT EXISTS ind_author_orcid ON authors (orcid);''')
 
                 self.db_schema_version = 3
+                self.db.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
+
+        if self.db_schema_version < 4:
+            with self.db:
+                # Create an index on the author id to speed things up when searching/joining.
+                self.db.execute('''CREATE TABLE IF NOT EXISTS parsed_files(
+                                        hash INT UNIQUE
+                                    );''')
+
+                self.db_schema_version = 4
                 self.db.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
 
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
@@ -306,6 +317,28 @@ class DatabaseManager(object):
         with open('unknown_venues_{0}'.format(self.run_date_string), 'w') as uvfile:
             for k, v in sorted_dict:
                 uvfile.write("{0}, {1}\n".format(k, v))
+
+    def did_parse_file(self, file_path):
+        BUF_SIZE = 2 ** 20
+        x = xxhash.xxh32()
+        with open(file_path, 'rb') as f:
+            while True:
+                data = f.read(BUF_SIZE)
+                if not data:
+                    break
+                x.update(data)
+
+        hash = x.intdigest()
+        query_result = self.db.execute("SELECT * from parsed_files WHERE hash = ?", [hash]).fetchone()
+        if not query_result:
+            return hash, True
+        else:
+            return hash, False
+
+    def add_parsed_file(self, hash):
+        with self.db:
+            self.db.execute("INSERT into parsed_files (hash) VALUES (?)", [hash])
+
 
     @staticmethod
     def sanitize_string(string):

@@ -9,6 +9,10 @@ from database_manager import DatabaseManager
 def parse(dblp_file, database_path="aip.db"):
         database = DatabaseManager(location=database_path)
 
+        hash, parsed = database.did_parse_file(dblp_file)
+        if parsed:
+            return True
+
         counter = 0  # counter for new keys.
 
         # dtd = etree.DTD(file="/media/lfdversluis/datastore/dblp.dtd")
@@ -77,6 +81,7 @@ def parse(dblp_file, database_path="aip.db"):
             element.clear()
 
             # database.flush_missing_venues()
+        database.add_parsed_file(hash)
         database.close()
         return True
 
