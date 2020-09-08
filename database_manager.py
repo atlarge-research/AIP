@@ -331,9 +331,9 @@ class DatabaseManager(object):
         hash = x.intdigest()
         query_result = self.db.execute("SELECT * from parsed_files WHERE hash = ?", [hash]).fetchone()
         if not query_result:
-            return hash, True
-        else:
             return hash, False
+        else:
+            return hash, True
 
     def add_parsed_file(self, hash):
         with self.db:
