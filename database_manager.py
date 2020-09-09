@@ -1,9 +1,9 @@
-import sqlite3
 from datetime import date, datetime
 
 import lxml
 import lxml.html
 import lxml.html.clean
+import psycopg2
 import xxhash
 from venue_mapper.venue_mapper import VenueMapper
 
@@ -11,7 +11,11 @@ from venue_mapper.venue_mapper import VenueMapper
 class DatabaseManager(object):
 
     def __init__(self, location="aip.db"):
-        self.db = sqlite3.connect(location, timeout=120.0)
+        self.db = psycopg2.connect(user = "postgres",
+                                  password = "password_here",
+                                  host = "127.0.0.1",
+                                  port = "5432",
+                                  database = location)
         self.setup_db()
         self.update_database()
         self.did_up_version = False
