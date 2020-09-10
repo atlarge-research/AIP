@@ -313,9 +313,9 @@ class DatabaseManager(object):
                 else:
                     with self.db:
                         with self.db.cursor() as cursor:
-                            cursor = cursor.execute('INSERT INTO authors (name, orcid) VALUES (%s,%s);',
+                            cursor = cursor.execute('INSERT INTO authors (name, orcid) VALUES (%s,%s) RETURNING id;',
                                                      (name, orcid))
-                            author_id = cursor.lastrowid
+                            author_id = cursor.fetchone()[0]
 
             # Now, insert the author, article id pair.
             cursor = self.db.cursor()
