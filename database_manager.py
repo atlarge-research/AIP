@@ -145,7 +145,7 @@ class DatabaseManager(object):
             with self.db:
                 with self.db.cursor() as cursor:
                     # Create an index on the author id to speed things up when searching/joining.
-                    cursor.execute("ALTER TABLE publications ALTER COLUMN venue TYPE CHARACTER VARCHAR(64);")
+                    cursor.execute("ALTER TABLE publications ALTER COLUMN venue TYPE VARCHAR(64);")
 
                     self.db_schema_version = 5
                     cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
