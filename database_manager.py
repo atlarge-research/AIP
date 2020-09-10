@@ -48,7 +48,7 @@ class DatabaseManager(object):
 
                 # Create a versioning table in which we store the date of last modification and the version of the database
                 cursor.execute('''CREATE TABLE IF NOT EXISTS properties (
-                                            last_modified DATE DEFAULT (DATETIME('now')) NOT NULL,
+                                            last_modified timestamp DEFAULT (now()) NOT NULL,
                                             db_schema_version INT DEFAULT 1 NOT NULL,
                                             version INT DEFAULT 0 NOT NULL
                                         );''')
@@ -78,7 +78,7 @@ class DatabaseManager(object):
             with self.db:
                 with self.db.cursor() as cursor:
                     cursor.execute(
-                    '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, DATETIME('now'), 1)''')
+                    '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, now(), 1)''')
                     self.start_version = 1
                     self.db_schema_version = 1
         else:
