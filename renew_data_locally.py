@@ -11,7 +11,7 @@ import parse_dblp
 import parse_semantic_scholar
 
 
-def process_file(path, db_file="aip.db"):
+def process_file(path, db_file="aip"):
     if re.match(".*dblp[\w-]+\.xml", path):
         return parse_dblp.parse(path, db_file)
     elif "s2-corpus" in path:
