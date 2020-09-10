@@ -313,7 +313,7 @@ class DatabaseManager(object):
                 else:
                     with self.db:
                         with self.db.cursor() as cursor:
-                            cursor = cursor.execute('INSERT INTO authors (name, orcid) VALUES (%s,%s) RETURNING id;',
+                            cursor.execute('INSERT INTO authors (name, orcid) VALUES (%s,%s) RETURNING id;',
                                                      (name, orcid))
                             author_id = cursor.fetchone()[0]
 
