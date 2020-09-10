@@ -118,7 +118,7 @@ class DatabaseManager(object):
                                             ON author_paper_pairs (author_id, paper_id);''')
 
                     self.db_schema_version = 2
-                    cursor.execute("UPDATE properties SET db_schema_version = ?;", [self.db_schema_version])
+                    cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
 
         if self.db_schema_version < 3:
             with self.db:
@@ -128,7 +128,7 @@ class DatabaseManager(object):
                     cursor.execute('''CREATE INDEX IF NOT EXISTS ind_author_orcid ON authors (orcid);''')
 
                     self.db_schema_version = 3
-                    cursor.execute("UPDATE properties SET db_schema_version = ?;", [self.db_schema_version])
+                    cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
 
         if self.db_schema_version < 4:
             with self.db:
@@ -139,7 +139,7 @@ class DatabaseManager(object):
                                         );''')
 
                     self.db_schema_version = 4
-                    cursor.execute("UPDATE properties SET db_schema_version = ?;", [self.db_schema_version])
+                    cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
 
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
         title = self.sanitize_string(title)
@@ -181,7 +181,7 @@ class DatabaseManager(object):
 
     def try_to_update_using_doi(self, doi, abstract, num_citations):
 
-        query = "SELECT abstract, n_citations FROM publications WHERE doi = ?;"
+        query = "SELECT abstract, n_citations FROM publications WHERE doi = %s;"
         cursor = self.db.cursor()
         cursor.execute(query, [doi])
 
@@ -193,14 +193,14 @@ class DatabaseManager(object):
         if row is not None:
             succeeded = True
             if len(row[0]) == 0 and len(abstract) > 0:
-                query = "UPDATE publications set abstract = ? WHERE doi = ?;"
+                query = "UPDATE publications set abstract = %s WHERE doi = %s;"
                 with self.db:
                     with self.db.cursor() as cursor:
                         cursor.execute(query, [abstract, doi])
                 data_modified = True
 
             if row[1] < num_citations:
-                query = "UPDATE publications set n_citations = ? WHERE doi = ?;"
+                query = "UPDATE publications set n_citations = %s WHERE doi = %s;"
                 with self.db:
                     with self.db.cursor() as cursor:
                         cursor.execute(query, [num_citations, doi])
@@ -213,7 +213,7 @@ class DatabaseManager(object):
         if (abstract is None or len(abstract) == 0) and (doi is None or len(doi) == 0):
             return True, False
 
-        query = "SELECT count(*) FROM publications WHERE title like ?;"
+        query = "SELECT count(*) FROM publications WHERE title like %s;"
         cursor = self.db.cursor()
         cursor.execute(query, [title])
         match_count = cursor.fetchone()[0]
@@ -222,7 +222,7 @@ class DatabaseManager(object):
             return False, False  # Couldn't find a match and thus not modify any data
 
         if match_count == 1:
-            query = "SELECT abstract, doi, n_citations FROM publications WHERE title like ?;"
+            query = "SELECT abstract, doi, n_citations FROM publications WHERE title like %s;"
             cursor = self.db.cursor()
             cursor.execute(query, [title])
             row = cursor.fetchone()
@@ -236,15 +236,15 @@ class DatabaseManager(object):
             arguments = []
             query_part = ""
             if (row[0] is None or len(row[0]) == 0) and (abstract is not None and len(abstract) > 0):
-                query_part += " abstract = ?,"
+                query_part += " abstract = %s,"
                 arguments.append(abstract)
 
             if (row[1] is None or len(row[1]) == 0) and (doi is not None and len(doi) > 0):
-                query_part += " doi = ?,"
+                query_part += " doi = %s,"
                 arguments.append(doi)
 
             if row[2] < num_citations:
-                query_part += " n_citations = ?,"
+                query_part += " n_citations = %s,"
                 arguments.append(num_citations)
 
             if len(query_part) == 0:
@@ -254,14 +254,14 @@ class DatabaseManager(object):
 
             arguments.append(title)
 
-            query = "UPDATE publications SET {0} WHERE title like ?;".format(query_part)
+            query = "UPDATE publications SET {0} WHERE title like %s;".format(query_part)
             with self.db:
                 with self.db.cursor() as cursor:
                     cursor.execute(query, arguments)
         elif match_count > 1:
             # Multiple articles with the exact same title? Well then... best effort based on venue and year
-            query = "UPDATE publications set abstract = ?, n_citations = ?{0} WHERE title like ? AND venue = ? and year = ? and volume = ?;".format(
-                ", doi = ?" if doi is not None and len(doi) > 0 else ""
+            query = "UPDATE publications set abstract = %s, n_citations = %s{0} WHERE title like %s AND venue = %s and year = %s and volume = %s;".format(
+                ", doi = %s" if doi is not None and len(doi) > 0 else ""
             )
             arguments = [abstract, num_citations, title, venue, year, volume, num_citations]
             if doi is not None and len(doi) > 0:  # We will set the DOI too; add it to the arguments
@@ -286,7 +286,7 @@ class DatabaseManager(object):
         with self.db:
             with self.db.cursor() as cursor:
                 cursor.execute(
-                    "INSERT OR IGNORE INTO publications (id, venue, year, volume, title, doi, abstract, n_citations) VALUES(?, ?, ?, ?, ?, ?, ?, ?);",
+                    "INSERT OR IGNORE INTO publications (id, venue, year, volume, title, doi, abstract, n_citations) VALUES(%s, %s, %s, %s, %s, %s, %s, %s);",
                     (id, venue, year, volume, title, doi, abstract, num_citations))
 
     def add_authors_for_article(self, authors, article_id):
@@ -299,33 +299,33 @@ class DatabaseManager(object):
             author_id = None
             if orcid is not None:
                 cursor = self.db.cursor()
-                cursor.execute("SELECT id from authors where orcid = ?;", [orcid])
+                cursor.execute("SELECT id from authors where orcid = %s;", [orcid])
                 query_result = cursor.fetchone()
                 if query_result is not None:
                     author_id = query_result[0]
 
             if author_id is None:  # Try to match by name
                 cursor = self.db.cursor()
-                cursor.execute("SELECT id from authors where name = ?;", [name])
+                cursor.execute("SELECT id from authors where name = %s;", [name])
                 query_result = cursor.fetchone()
                 if query_result is not None:
                     author_id = query_result[0]
                 else:
                     with self.db:
                         with self.db.cursor() as cursor:
-                            cursor = cursor.execute('INSERT INTO authors (id, name, orcid) VALUES (?,?,?);',
+                            cursor = cursor.execute('INSERT INTO authors (id, name, orcid) VALUES (%s,%s,%s);',
                                                      (None, name, orcid))
                             author_id = cursor.lastrowid
 
             # Now, insert the author, article id pair.
             cursor = self.db.cursor()
-            cursor.execute("SELECT author_id from author_paper_pairs WHERE author_id = ? AND paper_id = ?;",
+            cursor.execute("SELECT author_id from author_paper_pairs WHERE author_id = %s AND paper_id = %s;",
                 [author_id, article_id])
             query_result = cursor.fetchone()
             if not query_result:  # Entry doesn't exist, so add it.
                 with self.db:
                     with self.db.cursor() as cursor:
-                        cursor.execute('INSERT INTO author_paper_pairs (author_id, paper_id) VALUES (?,?);',
+                        cursor.execute('INSERT INTO author_paper_pairs (author_id, paper_id) VALUES (%s,%s);',
                                         (author_id, article_id))
 
     def update_version_and_date(self):
@@ -334,7 +334,7 @@ class DatabaseManager(object):
 
         with self.db:
             with self.db.cursor() as cursor:
-                cursor.execute("UPDATE properties SET version = version + 1, last_modified = ?;", [date.today()])
+                cursor.execute("UPDATE properties SET version = version + 1, last_modified = %s;", [date.today()])
                 self.did_up_version = True
 
     def flush_missing_venues(self):
@@ -356,7 +356,7 @@ class DatabaseManager(object):
 
         hash = x.intdigest()
         cursor = self.db.cursor()
-        cursor.execute("SELECT * from parsed_files WHERE hash = ?;", [hash])
+        cursor.execute("SELECT * from parsed_files WHERE hash = %s;", [hash])
         query_result = cursor.fetchone()
         if not query_result:
             return hash, False
@@ -366,7 +366,7 @@ class DatabaseManager(object):
     def add_parsed_file(self, hash):
         with self.db:
             with self.db.cursor() as cursor:
-                cursor.execute("INSERT into parsed_files (hash) VALUES (?);", [hash])
+                cursor.execute("INSERT into parsed_files (hash) VALUES (%s);", [hash])
 
     @staticmethod
     def sanitize_string(string):
