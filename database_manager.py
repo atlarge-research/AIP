@@ -141,6 +141,15 @@ class DatabaseManager(object):
                     self.db_schema_version = 4
                     cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
 
+        if self.db_schema_version < 5:
+            with self.db:
+                with self.db.cursor() as cursor:
+                    # Create an index on the author id to speed things up when searching/joining.
+                    cursor.execute("ALTER TABLE publications ALTER COLUMN venue TYPE CHARACTER VARCHAR(64);")
+
+                    self.db_schema_version = 5
+                    cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
+
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
         title = self.sanitize_string(title)
         abstract = self.sanitize_string(abstract)
