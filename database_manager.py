@@ -313,8 +313,8 @@ class DatabaseManager(object):
                 else:
                     with self.db:
                         with self.db.cursor() as cursor:
-                            cursor = cursor.execute('INSERT INTO authors (id, name, orcid) VALUES (%s,%s,%s);',
-                                                     (None, name, orcid))
+                            cursor = cursor.execute('INSERT INTO authors (name, orcid) VALUES (%s,%s);',
+                                                     (name, orcid))
                             author_id = cursor.lastrowid
 
             # Now, insert the author, article id pair.
