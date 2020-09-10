@@ -10,7 +10,7 @@ from venue_mapper.venue_mapper import VenueMapper
 
 class DatabaseManager(object):
 
-    def __init__(self, location="aip.db"):
+    def __init__(self, location="aip"):
         self.db = psycopg2.connect(user="postgres",
                                    password="password_here",
                                    host="127.0.0.1",
