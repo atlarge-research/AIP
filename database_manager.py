@@ -320,7 +320,7 @@ class DatabaseManager(object):
             # Now, insert the author, article id pair.
             cursor = self.db.cursor()
             cursor.execute("SELECT author_id from author_paper_pairs WHERE author_id = %s AND paper_id = %s;",
-                [author_id, article_id])
+                [str(author_id), str(article_id)])
             query_result = cursor.fetchone()
             if not query_result:  # Entry doesn't exist, so add it.
                 with self.db:
