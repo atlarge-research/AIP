@@ -71,9 +71,10 @@ class DatabaseManager(object):
                                         ON publications (doi);''')
 
         query = "SELECT version, db_schema_version FROM properties"
-        query_result = self.db.cursor().execute(query)
+        cursor = self.db.cursor()
+        cursor.execute(query)
 
-        row = query_result.fetchone()
+        row = cursor.fetchone()
         if row is None:
             with self.db:
                 with self.db.cursor() as cursor:
@@ -181,9 +182,10 @@ class DatabaseManager(object):
     def try_to_update_using_doi(self, doi, abstract, num_citations):
 
         query = "SELECT abstract, n_citations FROM publications WHERE doi = ?"
-        query_result = self.db.cursor().execute(query, [doi])
+        cursor = self.db.cursor()
+        cursor.execute(query, [doi])
 
-        row = query_result.fetchone()
+        row = cursor.fetchone()
 
         succeeded = False
         data_modified = False
@@ -212,16 +214,18 @@ class DatabaseManager(object):
             return True, False
 
         query = "SELECT count(*) FROM publications WHERE title like ?"
-        query_result = self.db.cursor().execute(query, [title])
-        match_count = query_result.fetchone()[0]
+        cursor = self.db.cursor()
+        cursor.execute(query, [title])
+        match_count = cursor.fetchone()[0]
 
         if match_count == 0:
             return False, False  # Couldn't find a match and thus not modify any data
 
         if match_count == 1:
             query = "SELECT abstract, doi, n_citations FROM publications WHERE title like ?"
-            query_result = self.db.cursor().execute(query, [title])
-            row = query_result.fetchone()
+            cursor = self.db.cursor()
+            cursor.execute(query, [title])
+            row = cursor.fetchone()
 
             # Check if the abstract (index 0) and DOI (index 1) are filled in
             if row[0] is not None and len(row[0]) > 0 and row[1] is not None and len(row[1]) > 0 and \
@@ -294,12 +298,16 @@ class DatabaseManager(object):
         for name, orcid in authors:
             author_id = None
             if orcid is not None:
-                query_result = self.db.cursor().execute("SELECT id from authors where orcid = ?", [orcid]).fetchone()
+                cursor = self.db.cursor()
+                cursor.execute("SELECT id from authors where orcid = ?", [orcid])
+                query_result = cursor.fetchone()
                 if query_result is not None:
                     author_id = query_result[0]
 
             if author_id is None:  # Try to match by name
-                query_result = self.db.cursor().execute("SELECT id from authors where name = ?", [name]).fetchone()
+                cursor = self.db.cursor()
+                cursor.execute("SELECT id from authors where name = ?", [name])
+                query_result = cursor.fetchone()
                 if query_result is not None:
                     author_id = query_result[0]
                 else:
@@ -310,9 +318,10 @@ class DatabaseManager(object):
                             author_id = cursor.lastrowid
 
             # Now, insert the author, article id pair.
-            query_result = self.db.cursor().execute(
-                "SELECT author_id from author_paper_pairs WHERE author_id = ? AND paper_id = ?",
-                [author_id, article_id]).fetchone()
+            cursor = self.db.cursor()
+            cursor.execute("SELECT author_id from author_paper_pairs WHERE author_id = ? AND paper_id = ?",
+                [author_id, article_id])
+            query_result = cursor.fetchone()
             if not query_result:  # Entry doesn't exist, so add it.
                 with self.db:
                     with self.db.cursor() as cursor:
@@ -346,7 +355,9 @@ class DatabaseManager(object):
                 x.update(data)
 
         hash = x.intdigest()
-        query_result = self.db.cursor().execute("SELECT * from parsed_files WHERE hash = ?", [hash]).fetchone()
+        cursor = self.db.cursor()
+        cursor.execute("SELECT * from parsed_files WHERE hash = ?", [hash])
+        query_result = cursor.fetchone()
         if not query_result:
             return hash, False
         else:
