@@ -99,7 +99,7 @@ class DatabaseManager(object):
 
                     # Create a table linking author ids to article ids
                     cursor.execute('''CREATE TABLE IF NOT EXISTS authors(
-                                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                            id SERIAL PRIMARY KEY,
                                             name VARCHAR(64) NOT NULL,
                                             orcid VARCHAR(32)
                                         );''')
