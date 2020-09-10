@@ -286,7 +286,7 @@ class DatabaseManager(object):
         with self.db:
             with self.db.cursor() as cursor:
                 cursor.execute(
-                    "INSERT OR IGNORE INTO publications (id, venue, year, volume, title, doi, abstract, n_citations) VALUES(%s, %s, %s, %s, %s, %s, %s, %s);",
+                    "INSERT INTO publications (id, venue, year, volume, title, doi, abstract, n_citations) VALUES(%s, %s, %s, %s, %s, %s, %s, %s);",
                     (id, venue, year, volume, title, doi, abstract, num_citations))
 
     def add_authors_for_article(self, authors, article_id):
