@@ -11,11 +11,11 @@ from venue_mapper.venue_mapper import VenueMapper
 class DatabaseManager(object):
 
     def __init__(self, location="aip.db"):
-        self.db = psycopg2.connect(user = "postgres",
-                                  password = "password_here",
-                                  host = "127.0.0.1",
-                                  port = "5432",
-                                  database = location)
+        self.db = psycopg2.connect(user="postgres",
+                                   password="password_here",
+                                   host="127.0.0.1",
+                                   port="5432",
+                                   database=location)
         self.setup_db()
         self.update_database()
         self.did_up_version = False
@@ -29,7 +29,8 @@ class DatabaseManager(object):
     def setup_db(self):
         # Create the publication table
         with self.db:
-            self.db.execute('''CREATE TABLE IF NOT EXISTS publications
+            with self.db.cursor() as cursor:
+                cursor.execute('''CREATE TABLE IF NOT EXISTS publications
                             (id VARCHAR(64) NOT NULL,
                             venue VARCHAR(16),
                             year INTEGER,
@@ -40,45 +41,46 @@ class DatabaseManager(object):
                             PRIMARY KEY (id)
                             );''')
 
-            # Insert Create a cites table linking paper -> another paper it cites per row
-            self.db.execute('''CREATE TABLE IF NOT EXISTS cites
+                # Insert Create a cites table linking paper -> another paper it cites per row
+                cursor.execute('''CREATE TABLE IF NOT EXISTS cites
                                     (paper_id VARCHAR(64) NOT NULL,
                                     cited_paper_id VARCHAR(64) NOT NULL);''')
 
-            # Create a versioning table in which we store the date of last modification and the version of the database
-            self.db.execute('''CREATE TABLE IF NOT EXISTS properties (
-                                        last_modified DATE DEFAULT (DATETIME('now')) NOT NULL,
-                                        db_schema_version INT DEFAULT 1 NOT NULL,
-                                        version INT DEFAULT 0 NOT NULL
-                                    );''')
+                # Create a versioning table in which we store the date of last modification and the version of the database
+                cursor.execute('''CREATE TABLE IF NOT EXISTS properties (
+                                            last_modified DATE DEFAULT (DATETIME('now')) NOT NULL,
+                                            db_schema_version INT DEFAULT 1 NOT NULL,
+                                            version INT DEFAULT 0 NOT NULL
+                                        );''')
 
-            # Create a compound index on this table to speed up looking things up.
-            self.db.execute('''CREATE UNIQUE INDEX IF NOT EXISTS paper_cite_pair
-                            ON cites (paper_id, cited_paper_id);''')
+                # Create a compound index on this table to speed up looking things up.
+                cursor.execute('''CREATE UNIQUE INDEX IF NOT EXISTS paper_cite_pair
+                                ON cites (paper_id, cited_paper_id);''')
 
-            # Create indices on title, abstract, and venue which are often searched on
-            self.db.execute('''CREATE INDEX IF NOT EXISTS ind_title
-                                    ON publications (title);''')
+                # Create indices on title, abstract, and venue which are often searched on
+                cursor.execute('''CREATE INDEX IF NOT EXISTS ind_title
+                                        ON publications (title);''')
 
-            self.db.execute('''CREATE INDEX IF NOT EXISTS ind_abstract
-                                    ON publications (abstract);''')
+                cursor.execute('''CREATE INDEX IF NOT EXISTS ind_abstract
+                                        ON publications (abstract);''')
 
-            self.db.execute('''CREATE INDEX IF NOT EXISTS ind_venue
-                                    ON publications (venue);''')
+                cursor.execute('''CREATE INDEX IF NOT EXISTS ind_venue
+                                        ON publications (venue);''')
 
-            self.db.execute('''CREATE INDEX IF NOT EXISTS ind_doi
-                                    ON publications (doi);''')
+                cursor.execute('''CREATE INDEX IF NOT EXISTS ind_doi
+                                        ON publications (doi);''')
 
-        query = "SELECT version, db_schema_version FROM properties"
-        query_result = self.db.execute(query)
+                query = "SELECT version, db_schema_version FROM properties"
+                query_result = cursor.execute(query)
 
         row = query_result.fetchone()
         if row is None:
             with self.db:
-                self.db.execute(
+                with self.db.cursor() as cursor:
+                    cursor.execute(
                     '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, DATETIME('now'), 1)''')
-            self.start_version = 1
-            self.db_schema_version = 1
+                    self.start_version = 1
+                    self.db_schema_version = 1
         else:
             self.start_version = row[0]
             self.db_schema_version = row[1]
@@ -91,49 +93,52 @@ class DatabaseManager(object):
             # We set the default amount of citations to -1, indicating an invalid number since we simply don't know
             # Setting it to 0 can cause confusion: is it actually 0 or do we simply don't know?
             with self.db:
-                self.db.execute("ALTER TABLE publications ADD COLUMN n_citations INTEGER NOT NULL default -1")
+                with self.db.cursor() as cursor:
+                    cursor.execute("ALTER TABLE publications ADD COLUMN n_citations INTEGER NOT NULL default -1")
 
-                # Create a table linking author ids to article ids
-                self.db.execute('''CREATE TABLE IF NOT EXISTS authors(
-                                        id INTEGER PRIMARY KEY AUTOINCREMENT,
-                                        name VARCHAR(64) NOT NULL,
-                                        orcid VARCHAR(32)
-                                    );''')
-
-                # Create an index on the author id to speed things up when searching/joining.
-                self.db.execute('''CREATE INDEX IF NOT EXISTS ind_author_id ON authors (id);''')
-
-                # Create a table linking author ids to article ids
-                self.db.execute('''CREATE TABLE IF NOT EXISTS author_paper_pairs(
-                                            author_id VARCHAR(64) NOT NULL,
-                                            paper_id VARCHAR(64) NOT NULL
+                    # Create a table linking author ids to article ids
+                    cursor.execute('''CREATE TABLE IF NOT EXISTS authors(
+                                            id INTEGER PRIMARY KEY AUTOINCREMENT,
+                                            name VARCHAR(64) NOT NULL,
+                                            orcid VARCHAR(32)
                                         );''')
 
-                # Create a compound index on this table to speed up looking things up.
-                self.db.execute('''CREATE UNIQUE INDEX IF NOT EXISTS author_paper_pair
-                                        ON author_paper_pairs (author_id, paper_id);''')
+                    # Create an index on the author id to speed things up when searching/joining.
+                    cursor.execute('''CREATE INDEX IF NOT EXISTS ind_author_id ON authors (id);''')
 
-                self.db_schema_version = 2
-                self.db.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
+                    # Create a table linking author ids to article ids
+                    cursor.execute('''CREATE TABLE IF NOT EXISTS author_paper_pairs(
+                                                author_id VARCHAR(64) NOT NULL,
+                                                paper_id VARCHAR(64) NOT NULL
+                                            );''')
+
+                    # Create a compound index on this table to speed up looking things up.
+                    cursor.execute('''CREATE UNIQUE INDEX IF NOT EXISTS author_paper_pair
+                                            ON author_paper_pairs (author_id, paper_id);''')
+
+                    self.db_schema_version = 2
+                    cursor.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
 
         if self.db_schema_version < 3:
             with self.db:
-                # Create an index on the author id to speed things up when searching/joining.
-                self.db.execute('''CREATE INDEX IF NOT EXISTS ind_author_name ON authors (name);''')
-                self.db.execute('''CREATE INDEX IF NOT EXISTS ind_author_orcid ON authors (orcid);''')
+                with self.db.cursor() as cursor:
+                    # Create an index on the author id to speed things up when searching/joining.
+                    cursor.execute('''CREATE INDEX IF NOT EXISTS ind_author_name ON authors (name);''')
+                    cursor.execute('''CREATE INDEX IF NOT EXISTS ind_author_orcid ON authors (orcid);''')
 
-                self.db_schema_version = 3
-                self.db.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
+                    self.db_schema_version = 3
+                    cursor.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
 
         if self.db_schema_version < 4:
             with self.db:
-                # Create an index on the author id to speed things up when searching/joining.
-                self.db.execute('''CREATE TABLE IF NOT EXISTS parsed_files(
-                                        hash INT UNIQUE
-                                    );''')
+                with self.db.cursor() as cursor:
+                    # Create an index on the author id to speed things up when searching/joining.
+                    cursor.execute('''CREATE TABLE IF NOT EXISTS parsed_files(
+                                            hash INT UNIQUE
+                                        );''')
 
-                self.db_schema_version = 4
-                self.db.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
+                    self.db_schema_version = 4
+                    cursor.execute("UPDATE properties SET db_schema_version = ?", [self.db_schema_version])
 
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
         title = self.sanitize_string(title)
@@ -176,7 +181,7 @@ class DatabaseManager(object):
     def try_to_update_using_doi(self, doi, abstract, num_citations):
 
         query = "SELECT abstract, n_citations FROM publications WHERE doi = ?"
-        query_result = self.db.execute(query, [doi])
+        query_result = self.db.cursor().execute(query, [doi])
 
         row = query_result.fetchone()
 
@@ -188,13 +193,15 @@ class DatabaseManager(object):
             if len(row[0]) == 0 and len(abstract) > 0:
                 query = "UPDATE publications set abstract = ? WHERE doi = ?"
                 with self.db:
-                    self.db.execute(query, [abstract, doi])
+                    with self.db.cursor() as cursor:
+                        cursor.execute(query, [abstract, doi])
                 data_modified = True
 
             if row[1] < num_citations:
                 query = "UPDATE publications set n_citations = ? WHERE doi = ?"
                 with self.db:
-                    self.db.execute(query, [num_citations, doi])
+                    with self.db.cursor() as cursor:
+                        cursor.execute(query, [num_citations, doi])
                 data_modified = True
 
         return succeeded, data_modified
@@ -205,7 +212,7 @@ class DatabaseManager(object):
             return True, False
 
         query = "SELECT count(*) FROM publications WHERE title like ?"
-        query_result = self.db.execute(query, [title])
+        query_result = self.db.cursor().execute(query, [title])
         match_count = query_result.fetchone()[0]
 
         if match_count == 0:
@@ -213,7 +220,7 @@ class DatabaseManager(object):
 
         if match_count == 1:
             query = "SELECT abstract, doi, n_citations FROM publications WHERE title like ?"
-            query_result = self.db.execute(query, [title])
+            query_result = self.db.cursor().execute(query, [title])
             row = query_result.fetchone()
 
             # Check if the abstract (index 0) and DOI (index 1) are filled in
@@ -245,7 +252,8 @@ class DatabaseManager(object):
 
             query = "UPDATE publications SET {0} WHERE title like ?".format(query_part)
             with self.db:
-                self.db.execute(query, arguments)
+                with self.db.cursor() as cursor:
+                    cursor.execute(query, arguments)
         elif match_count > 1:
             # Multiple articles with the exact same title? Well then... best effort based on venue and year
             query = "UPDATE publications set abstract = ?, n_citations = ?{0} WHERE title like ? AND venue = ? and year = ? and volume = ?".format(
@@ -261,7 +269,8 @@ class DatabaseManager(object):
             # which lacks in the semantic scholar data.
             try:
                 with self.db:
-                    self.db.execute(query, arguments)
+                    with self.db.cursor() as cursor:
+                        cursor.execute(query, arguments)
             except Exception as ex:
                 print(ex)
                 print(query, arguments)
@@ -271,9 +280,10 @@ class DatabaseManager(object):
     def insert_new_article(self, id, title, abstract, doi, venue, year, volume, num_citations):
         # We cannot update an existing row, so we assume this is a new entry.
         with self.db:
-            self.db.execute(
-                "INSERT OR IGNORE INTO publications (id, venue, year, volume, title, doi, abstract, n_citations) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
-                (id, venue, year, volume, title, doi, abstract, num_citations))
+            with self.db.cursor() as cursor:
+                cursor.execute(
+                    "INSERT OR IGNORE INTO publications (id, venue, year, volume, title, doi, abstract, n_citations) VALUES(?, ?, ?, ?, ?, ?, ?, ?)",
+                    (id, venue, year, volume, title, doi, abstract, num_citations))
 
     def add_authors_for_article(self, authors, article_id):
         """
@@ -284,36 +294,39 @@ class DatabaseManager(object):
         for name, orcid in authors:
             author_id = None
             if orcid is not None:
-                query_result = self.db.execute("SELECT id from authors where orcid = ?", [orcid]).fetchone()
+                query_result = self.db.cursor().execute("SELECT id from authors where orcid = ?", [orcid]).fetchone()
                 if query_result is not None:
                     author_id = query_result[0]
 
             if author_id is None:  # Try to match by name
-                query_result = self.db.execute("SELECT id from authors where name = ?", [name]).fetchone()
+                query_result = self.db.cursor().execute("SELECT id from authors where name = ?", [name]).fetchone()
                 if query_result is not None:
                     author_id = query_result[0]
                 else:
                     with self.db:
-                        cursor = self.db.execute('INSERT INTO authors (id, name, orcid) VALUES (?,?,?)',
-                                                 (None, name, orcid))
-                        author_id = cursor.lastrowid
+                        with self.db.cursor() as cursor:
+                            cursor = cursor.execute('INSERT INTO authors (id, name, orcid) VALUES (?,?,?)',
+                                                     (None, name, orcid))
+                            author_id = cursor.lastrowid
 
             # Now, insert the author, article id pair.
-            query_result = self.db.execute(
+            query_result = self.db.cursor().execute(
                 "SELECT author_id from author_paper_pairs WHERE author_id = ? AND paper_id = ?",
                 [author_id, article_id]).fetchone()
             if not query_result:  # Entry doesn't exist, so add it.
                 with self.db:
-                    self.db.execute('INSERT INTO author_paper_pairs (author_id, paper_id) VALUES (?,?)',
-                                    (author_id, article_id))
+                    with self.db.cursor() as cursor:
+                        cursor.execute('INSERT INTO author_paper_pairs (author_id, paper_id) VALUES (?,?)',
+                                        (author_id, article_id))
 
     def update_version_and_date(self):
         if self.did_up_version:
             return
 
         with self.db:
-            self.db.execute("UPDATE properties SET version = version + 1, last_modified = ?", [date.today()])
-            self.did_up_version = True
+            with self.db.cursor() as cursor:
+                cursor.execute("UPDATE properties SET version = version + 1, last_modified = ?", [date.today()])
+                self.did_up_version = True
 
     def flush_missing_venues(self):
         sorted_dict = [(k, self.unknown_venue_dict[k]) for k in
@@ -333,7 +346,7 @@ class DatabaseManager(object):
                 x.update(data)
 
         hash = x.intdigest()
-        query_result = self.db.execute("SELECT * from parsed_files WHERE hash = ?", [hash]).fetchone()
+        query_result = self.db.cursor().execute("SELECT * from parsed_files WHERE hash = ?", [hash]).fetchone()
         if not query_result:
             return hash, False
         else:
@@ -341,8 +354,8 @@ class DatabaseManager(object):
 
     def add_parsed_file(self, hash):
         with self.db:
-            self.db.execute("INSERT into parsed_files (hash) VALUES (?)", [hash])
-
+            with self.db.cursor() as cursor:
+                cursor.execute("INSERT into parsed_files (hash) VALUES (?)", [hash])
 
     @staticmethod
     def sanitize_string(string):
