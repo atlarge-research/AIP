@@ -70,8 +70,8 @@ class DatabaseManager(object):
                 cursor.execute('''CREATE INDEX IF NOT EXISTS ind_doi
                                         ON publications (doi);''')
 
-                query = "SELECT version, db_schema_version FROM properties"
-                query_result = cursor.execute(query)
+        query = "SELECT version, db_schema_version FROM properties"
+        query_result = self.db.cursor().execute(query)
 
         row = query_result.fetchone()
         if row is None:
