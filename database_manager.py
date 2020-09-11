@@ -160,6 +160,16 @@ class DatabaseManager(object):
                     self.db_schema_version = 6
                     cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
 
+        if self.db_schema_version < 7:
+            # xxhash returns an unsigned int which can go over the limit of the signed integer type of postgres
+            with self.db:
+                with self.db.cursor() as cursor:
+                    # Create an index on the author id to speed things up when searching/joining.
+                    cursor.execute("ALTER TABLE parsed_files ALTER COLUMN hash TYPE BIGINT;")
+
+                    self.db_schema_version = 7
+                    cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
+
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
         title = self.sanitize_string(title)
         abstract = self.sanitize_string(abstract)
