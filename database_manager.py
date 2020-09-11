@@ -150,6 +150,16 @@ class DatabaseManager(object):
                     self.db_schema_version = 5
                     cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
 
+        if self.db_schema_version < 6:
+            # Who knew the longest name in the world is 24 (first name) + 1000 letter (last name)...
+            with self.db:
+                with self.db.cursor() as cursor:
+                    # Create an index on the author id to speed things up when searching/joining.
+                    cursor.execute("ALTER TABLE authors ALTER COLUMN name TYPE VARCHAR(1024);")
+
+                    self.db_schema_version = 6
+                    cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
+
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
         title = self.sanitize_string(title)
         abstract = self.sanitize_string(abstract)
