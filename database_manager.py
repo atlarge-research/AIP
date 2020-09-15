@@ -79,7 +79,7 @@ class DatabaseManager(object):
             with self.db:
                 with self.db.cursor() as cursor:
                     cursor.execute(
-                    '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, now(), 1)''')
+                        '''INSERT INTO properties (version, last_modified, db_schema_version) VALUES(1, now(), 1)''')
                     self.start_version = 1
                     self.db_schema_version = 1
         else:
@@ -178,6 +178,19 @@ class DatabaseManager(object):
                     cursor.execute("ALTER TABLE publications ALTER COLUMN volume TYPE VARCHAR(32);")
 
                     self.db_schema_version = 8
+                    cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
+
+        if self.db_schema_version < 9:
+            # Use a GIN index instead of b-tree as it has a limit of 2704 characters and abstracts are longer
+            # Prior to version 9, we were getting
+            # psycopg2.errors.ProgramLimitExceeded: index row size 2864 exceeds btree version 4 maximum 2704 for index "ind_abstract"
+            with self.db:
+                with self.db.cursor() as cursor:
+                    # Volumes apparently can be bigger than 8 chars, example: abs/1704.04962 (probably ArXiV?)
+                    cursor.execute("DROP INDEX ind_abstract;")
+                    cursor.execute("CREATE INDEX ind_abstract ON publications USING GIN (abstract);")
+
+                    self.db_schema_version = 9
                     cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
 
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
@@ -353,19 +366,19 @@ class DatabaseManager(object):
                     with self.db:
                         with self.db.cursor() as cursor:
                             cursor.execute('INSERT INTO authors (name, orcid) VALUES (%s,%s) RETURNING id;',
-                                                     (name, orcid))
+                                           (name, orcid))
                             author_id = cursor.fetchone()[0]
 
             # Now, insert the author, article id pair.
             cursor = self.db.cursor()
             cursor.execute("SELECT author_id from author_paper_pairs WHERE author_id = %s AND paper_id = %s;",
-                [str(author_id), str(article_id)])
+                           [str(author_id), str(article_id)])
             query_result = cursor.fetchone()
             if not query_result:  # Entry doesn't exist, so add it.
                 with self.db:
                     with self.db.cursor() as cursor:
                         cursor.execute('INSERT INTO author_paper_pairs (author_id, paper_id) VALUES (%s,%s);',
-                                        (author_id, article_id))
+                                       (author_id, article_id))
 
     def update_version_and_date(self):
         if self.did_up_version:
