@@ -188,7 +188,7 @@ class DatabaseManager(object):
                 with self.db.cursor() as cursor:
                     # Volumes apparently can be bigger than 8 chars, example: abs/1704.04962 (probably ArXiV?)
                     cursor.execute("DROP INDEX ind_abstract;")
-                    cursor.execute("CREATE INDEX ind_abstract ON publications USING GIN (abstract);")
+                    cursor.execute("CREATE INDEX ind_abstract ON publications USING GIN (abstract gin_trgm_ops);")
 
                     self.db_schema_version = 9
                     cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
