@@ -170,6 +170,16 @@ class DatabaseManager(object):
                     self.db_schema_version = 7
                     cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
 
+        if self.db_schema_version < 8:
+            # xxhash returns an unsigned int which can go over the limit of the signed integer type of postgres
+            with self.db:
+                with self.db.cursor() as cursor:
+                    # Volumes apparently can be bigger than 8 chars, example: abs/1704.04962 (probably ArXiV?)
+                    cursor.execute("ALTER TABLE publications ALTER COLUMN volume TYPE VARCHAR(32);")
+
+                    self.db_schema_version = 8
+                    cursor.execute("UPDATE properties SET db_schema_version = %s;", [self.db_schema_version])
+
     def update_or_insert_paper(self, id, doi, title, abstract, raw_venue_string, year, volume, num_citations):
         title = self.sanitize_string(title)
         abstract = self.sanitize_string(abstract)
