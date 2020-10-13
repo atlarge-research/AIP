@@ -5,6 +5,7 @@ import pandas as pd
 
 nltk.download('stopwords')
 nltk.download('wordnet')
+nltk.download('punkt')
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from textblob import Word
@@ -51,8 +52,8 @@ stop_words.update(stopwords.words('english'))
 def create_df_for_query(database_connection, query, query_params=None):
     if query_params is None:
         query_params = list()
-
-    df = pd.read_sql(query, database_connection, params=query_params)
+       
+    df = pd.read_sql_query(query, database_connection, params=query_params)
 
     # Make the title and abstract fields lowercase and remove non character items
     clean_pattern = re.compile('[^\w\s\-\/]')
