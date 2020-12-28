@@ -32,8 +32,8 @@ We developed two useful scripts to run AIP and generate the database using raw d
 2. [A script to renew the data on a distributed system having a SLURM scheduler (managed by Dask)](https://github.com/atlarge-research/AIP/blob/master/renew_data_dask.py)
 
 The steps to run AIP are as followed:
-1. Clone this repository with submodules (recursive clone).
-2. Run either one of the two scripts or run separately [parse_dblp.py](https://github.com/atlarge-research/AIP/blob/master/parse_dblp.py), [parse_semantic_scholar.py](https://github.com/atlarge-research/AIP/blob/master/parse_semantic_scholar.py), or [parse_aminer.py](https://github.com/atlarge-research/AIP/blob/master/parse_aminer.py) using as argument to root of the data.
+1. Clone this repository.
+2. Run either one of the two scripts mentioned earlier or run separately [parse_dblp.py](https://github.com/atlarge-research/AIP/blob/master/parse_dblp.py), [parse_semantic_scholar.py](https://github.com/atlarge-research/AIP/blob/master/parse_semantic_scholar.py), or [parse_aminer.py](https://github.com/atlarge-research/AIP/blob/master/parse_aminer.py) using as argument to root of the data.
 
 Have a look at which argument each script accepts (such as an alternative database name) for more options.
 
