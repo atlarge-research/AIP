@@ -33,7 +33,7 @@ We developed two useful scripts to run AIP and generate the database using raw d
 
 The steps to run AIP are as followed:
 1. Clone this repository with submodules (recursive clone).
-2. Run either one of the two scripts or run separately [parse_dblp.py](https://github.com/atlarge-research/AIP/blob/master/parse_dblp.py), [parse_semantic_scholar.py](https://github.com/atlarge-research/AIP/blob/master/parse_semantic_scholar.py), or [parse_aminer.py](https://github.com/atlarge-research/AIP/blob/master/parse_aminer.py) using as argument to root of the __unpacked__ data.
+2. Run either one of the two scripts or run separately [parse_dblp.py](https://github.com/atlarge-research/AIP/blob/master/parse_dblp.py), [parse_semantic_scholar.py](https://github.com/atlarge-research/AIP/blob/master/parse_semantic_scholar.py), or [parse_aminer.py](https://github.com/atlarge-research/AIP/blob/master/parse_aminer.py) using as argument to root of the data.
 
 Have a look at which argument each script accepts (such as an alternative database name) for more options.
 
