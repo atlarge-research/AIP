@@ -1,6 +1,6 @@
 # AIP
 <ins>A</ins>rticle <ins>I</ins>nformation <ins>P</ins>arser is an instrument to parse, unify, and in some cases correct article meta-data. 
-AIP creates a SQLite database that allows for easily finding related work.
+AIP creates a PostgreSQL database that allows for easily finding related work.
 
 Developing such a database is tricky, an excerpt of [our article introducing this instrument](https://arxiv.org/abs/2004.10077):
 ```
@@ -11,7 +11,7 @@ Moreover, these datasets also overlap, yet contain important information the oth
 Our approach is to parse each dataset and filter and unify the information provided.
 ```
 
-This instrument combines three data sources: [DBLP](https://dblp.uni-trier.de/faq/How+can+I+download+the+whole+dblp+dataset), [Semantic Scholar](https://api.semanticscholar.org/corpus/download/), and [AMiner](https://www.aminer.cn/oag2019), which we filter and store in a SQLite database.
+This instrument combines three data sources: [DBLP](https://dblp.uni-trier.de/faq/How+can+I+download+the+whole+dblp+dataset), [Semantic Scholar](https://api.semanticscholar.org/corpus/download/), and [AMiner](https://www.aminer.cn/oag2019), which we filter and store in a PostgreSQL database.
 DBLP is a well-known European archive that focuses on computer science and features all the top-level venues (journals and conferences).
 Semantic Scholar is an American project created by the Allen Institute for AI.
 The project aims to analyze and extract important data from scientific publications.
@@ -33,13 +33,17 @@ We developed two useful scripts to run AIP and generate the database using raw d
 
 The steps to run AIP are as followed:
 1. Clone this repository.
-2. Run either one of the two scripts mentioned earlier or run separately [parse_dblp.py](https://github.com/atlarge-research/AIP/blob/master/parse_dblp.py), [parse_semantic_scholar.py](https://github.com/atlarge-research/AIP/blob/master/parse_semantic_scholar.py), or [parse_aminer.py](https://github.com/atlarge-research/AIP/blob/master/parse_aminer.py) using as argument to root of the data.
+2. Update PostgreSQL settings in [database_manager.py](https://github.com/atlarge-research/AIP/blob/master/database_manager.py)
+3. Download released datasets from three sources and store them in a directory.
+4. Run either one of the two scripts mentioned earlier or run separately [parse_dblp.py](https://github.com/atlarge-research/AIP/blob/master/parse_dblp.py), [parse_semantic_scholar.py](https://github.com/atlarge-research/AIP/blob/master/parse_semantic_scholar.py), or [parse_aminer.py](https://github.com/atlarge-research/AIP/blob/master/parse_aminer.py) using as argument to root of the data.
 
-Have a look at which argument each script accepts (such as an alternative database name) for more options.
+
+
+Have a look at which argument each script accepts (such as file locations) for more options.
 
 # AIP database structure
 
-The `aip.db` (default) database file contains the following tables:
+The database file contains the following tables:
 
 __publications__
 | Column name | Explanation                                                                        |
@@ -76,3 +80,18 @@ __properties__
 | db_schema_version | The version of the database schema. We use this to incrementally alter the database (adding indices, modifying/deleting/adding tables, etc.) |
 
 
+
+
+
+## Query Example
+The following SQL command returns papers from 2011 onwards with keywords `performance analysis quality` in either title or abstract, sorted by year in descending order.
+```
+SELECT * FROM publications WHERE year >= 2011
+AND (title LIKE '%performance%' 
+	OR abstract LIKE '%performance%')
+AND (title LIKE '%analysis%'
+	OR abstract LIKE '%analysis%')
+AND (title LIKE '%quality%'
+	OR abstract LIKE '%quality%')
+ORDER BY year DESC
+```
