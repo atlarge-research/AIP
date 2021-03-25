@@ -87,11 +87,11 @@ __properties__
 The following SQL command returns papers from 2011 onwards with keywords `performance analysis quality` in either title or abstract, sorted by year in descending order.
 ```
 SELECT * FROM publications WHERE year >= 2011
-AND (title LIKE '%performance%' 
-	OR abstract LIKE '%performance%')
-AND (title LIKE '%analysis%'
-	OR abstract LIKE '%analysis%')
-AND (title LIKE '%quality%'
-	OR abstract LIKE '%quality%')
+AND (lower(title) LIKE '%performance%' 
+	OR lower(abstract) LIKE '%performance%')
+AND (lower(title) LIKE '%analysis%'
+	OR lower(abstract) LIKE '%analysis%')
+AND (lower(title) LIKE '%quality%'
+	OR lower(abstract) LIKE '%quality%')
 ORDER BY year DESC
 ```
