@@ -11,17 +11,58 @@ from venue_mapper.venue_mapper import VenueMapper
 class DatabaseManager(object):
 
     def __init__(self, location="aip"):
-        self.db = psycopg2.connect(user="postgres",
-                                   password="password_here",
-                                   host="127.0.0.1",
-                                   port="5432",
-                                   database=location)
+
+        user = "postgres"
+        password = ""
+        host = "localhost"
+        port = "5432"
+
+        self.create_database(user, password, host, port, location)
+
+        self.db = psycopg2.connect(user=user,
+                                   password=password,
+                                   host=host,
+                                   port=port,
+                                   dbname=location)
         self.setup_db()
         self.update_database()
+        self.db.commit()
         self.did_up_version = False
         self.run_date_string = '{0:%Y-%m-%d_%H-%M-%S}'.format(datetime.now())
         self.unknown_venue_dict = dict()
         self.venue_mapper = VenueMapper()
+
+    def create_database(self, user, password, host, port, dbname):
+        conn = psycopg2.connect(user=user,
+                                password=password,
+                                host=host,
+                                port=port)
+        conn.autocommit = True
+        cur = conn.cursor()
+
+        cur.execute("SELECT datname FROM pg_database;")
+
+        # database seems to exist already
+        dbnames = cur.fetchall()
+        if (dbname,) in dbnames:
+            cur.close()
+            conn.close()
+            return
+
+        # "CREATE DATABASE" requires automatic commits
+        cur = conn.cursor()
+        sql_query = f"CREATE DATABASE {dbname}"
+
+        try:
+            cur.execute(sql_query)
+            cur.execute("CREATE EXTENSION pg_trgm;")
+        except Exception as e:
+            print(f"{type(e).__name__}: {e}")
+            print(f"Query: {cur.query}")
+            cur.close()
+        else:
+            # Revert autocommit settings
+            conn.autocommit = False
 
     def close(self):
         self.db.close()
@@ -30,6 +71,7 @@ class DatabaseManager(object):
         # Create the publication table
         with self.db:
             with self.db.cursor() as cursor:
+                cursor.execute('''CREATE EXTENSION if not exists pg_trgm;''')
                 cursor.execute('''CREATE TABLE IF NOT EXISTS publications
                             (id VARCHAR(64) NOT NULL,
                             venue VARCHAR(16),

@@ -9,7 +9,7 @@ from util import iterload_file_lines, iterload_file_lines_gzip
 logger = logging.getLogger(__name__)
 
 
-def parse_aminer_corpus_file(path, database_path="aip.db", logger_disabled=False):
+def parse_aminer_corpus_file(path, database_path="aip", logger_disabled=False):
     logger.disabled = logger_disabled
     database = DatabaseManager(location=database_path)
 

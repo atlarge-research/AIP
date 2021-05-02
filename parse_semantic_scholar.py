@@ -6,7 +6,7 @@ from database_manager import DatabaseManager
 from util import iterload_file_lines, iterload_file_lines_gzip
 
 
-def parse_semantic_scholar_corpus_file(path, database_path="aip.db"):
+def parse_semantic_scholar_corpus_file(path, database_path="aip"):
         database = DatabaseManager(location=database_path)
 
         hash, parsed = database.did_parse_file(path)
