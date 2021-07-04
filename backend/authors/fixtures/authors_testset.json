@@ -1,0 +1,56 @@
+[
+  {
+    "model": "authors.Authors",
+    "pk": 1,
+    "fields": {
+      "name": "Adam",
+      "orcid": "1234-1234-6543-1237",
+      "first_publication_year": 2000
+    }
+  },
+  {
+    "model": "authors.Authors",
+    "pk": 2,
+    "fields": {
+      "name": "Przemyslaw",
+      "orcid": "2222-1265-6543-1237",
+      "first_publication_year": 1999
+    }
+  },
+  {
+    "model": "authors.Authors",
+    "pk": 3,
+    "fields": {
+      "name": "Bob",
+      "orcid": "1234-1764-6539-1237",
+      "first_publication_year": 2010
+    }
+  },
+  {
+    "model": "authors.Authors",
+    "pk": 4,
+    "fields": {
+      "name": "William",
+      "orcid": "2432-1565-6543-1677",
+      "first_publication_year": 2019
+    }
+  },
+  {
+    "model": "authors.Authors",
+    "pk": 5,
+    "fields": {
+      "name": "Fabian",
+      "orcid": "1234-1234-6543-5567",
+      "first_publication_year": 1987
+    }
+  },
+  {
+    "model": "authors.Authors",
+    "pk": 6,
+    "fields": {
+      "name": "Michal",
+      "orcid": "2232-1265-6534-1117",
+      "first_publication_year": 2005
+    }
+  }
+]

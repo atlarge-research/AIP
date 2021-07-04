@@ -1,0 +1,954 @@
+[
+  {
+    "model": "publications.Publications",
+    "pk": 1,
+    "fields": {
+      "id": "1",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2005,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 8,
+      "semantic_scholar_id": "1",
+      "authors": [1],
+      "citations": []
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 2,
+    "fields": {
+      "id": "2",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2005,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 4,
+      "semantic_scholar_id": "2",
+      "authors": [7, 8],
+      "citations": [1]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 3,
+    "fields": {
+      "id": "3",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2005,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 4,
+      "semantic_scholar_id": "3",
+      "authors": [8, 7],
+      "citations": [1]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 4,
+    "fields": {
+      "id": "4",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2005,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 4,
+      "semantic_scholar_id": "4",
+      "authors": [1],
+      "citations": [2, 3]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 5,
+    "fields": {
+      "id": "5",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2006,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 4,
+      "semantic_scholar_id": "5",
+      "authors": [9, 1],
+      "citations": [1, 2, 3, 4]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 6,
+    "fields": {
+      "id": "6",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2006,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "6",
+      "authors": [7],
+      "citations": [5]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 7,
+    "fields": {
+      "id": "7",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2006,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "7",
+      "authors": [8],
+      "citations": [5]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 8,
+    "fields": {
+      "id": "8",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2008,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 5,
+      "semantic_scholar_id": "8",
+      "authors": [2, 1],
+      "citations": [5, 6]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 9,
+    "fields": {
+      "id": "9",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2008,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "9",
+      "authors": [2],
+      "citations": [3, 5]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 10,
+    "fields": {
+      "id": "10",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2008,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "10",
+      "authors": [1, 9],
+      "citations": [4, 8, 9]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 11,
+    "fields": {
+      "id": "11",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2009,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 5,
+      "semantic_scholar_id": "11",
+      "authors": [2],
+      "citations": [1, 2, 3, 10]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 12,
+    "fields": {
+      "id": "12",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2009,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "12",
+      "authors": [9],
+      "citations": [1, 2, 4]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 13,
+    "fields": {
+      "id": "13",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2009,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "13",
+      "authors": [8, 7],
+      "citations": [10, 11]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 14,
+    "fields": {
+      "id": "14",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2009,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "14",
+      "authors": [1],
+      "citations": [8, 11, 12]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 15,
+    "fields": {
+      "id": "15",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2013,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 10,
+      "semantic_scholar_id": "15",
+      "authors": [1],
+      "citations": [9, 10, 11]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 16,
+    "fields": {
+      "id": "16",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2013,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "16",
+      "authors": [6, 7],
+      "citations": [8, 13, 14, 15]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 17,
+    "fields": {
+      "id": "17",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2013,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 6,
+      "semantic_scholar_id": "17",
+      "authors": [2],
+      "citations": [7, 15]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 18,
+    "fields": {
+      "id": "18",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2013,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "18",
+      "authors": [8],
+      "citations": [8, 13, 15, 16]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 19,
+    "fields": {
+      "id": "19",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2014,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "19",
+      "authors": [2, 1],
+      "citations": [6, 15, 18]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 20,
+    "fields": {
+      "id": "20",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2014,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "20",
+      "authors": [7, 8],
+      "citations": [8, 13, 16]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 21,
+    "fields": {
+      "id": "21",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2014,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 0,
+      "semantic_scholar_id": "21",
+      "authors": [6, 7, 8],
+      "citations": [15, 17, 19, 54]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 22,
+    "fields": {
+      "id": "22",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2014,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 4,
+      "semantic_scholar_id": "22",
+      "authors": [6],
+      "citations": [14, 15, 17, 19]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 23,
+    "fields": {
+      "id": "23",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2014,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "23",
+      "authors": [2],
+      "citations": [1, 11, 18, 22]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 24,
+    "fields": {
+      "id": "24",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2016,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "24",
+      "authors": [3, 2],
+      "citations": [1, 15, 17, 22]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 25,
+    "fields": {
+      "id": "25",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2016,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 13,
+      "semantic_scholar_id": "25",
+      "authors": [1, 2],
+      "citations": [22, 24, 55]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 26,
+    "fields": {
+      "id": "26",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2016,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "26",
+      "authors": [9],
+      "citations": [18, 25]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 27,
+    "fields": {
+      "id": "27",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2016,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "27",
+      "authors": [8, 6],
+      "citations": [15, 20, 25]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 28,
+    "fields": {
+      "id": "28",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2016,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "28",
+      "authors": [7],
+      "citations": [4, 20, 25]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 29,
+    "fields": {
+      "id": "29",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2016,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 0,
+      "semantic_scholar_id": "29",
+      "authors": [6, 7],
+      "citations": [17, 25, 26]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 30,
+    "fields": {
+      "id": "30",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2017,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "30",
+      "authors": [4, 8, 2],
+      "citations": [24, 25, 28]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 31,
+    "fields": {
+      "id": "31",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2017,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 4,
+      "semantic_scholar_id": "31",
+      "authors": [3, 1, 2, 6],
+      "citations": [15, 30]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 32,
+    "fields": {
+      "id": "32",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2017,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "32",
+      "authors": [7, 5],
+      "citations": [24, 26]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 33,
+    "fields": {
+      "id": "33",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2017,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "33",
+      "authors": [8],
+      "citations": [17, 22, 25]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 34,
+    "fields": {
+      "id": "34",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2017,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "34",
+      "authors": [1],
+      "citations": [25, 27, 31]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 35,
+    "fields": {
+      "id": "35",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2017,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "35",
+      "authors": [6],
+      "citations": [25, 32, 34]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 36,
+    "fields": {
+      "id": "36",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2018,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "36",
+      "authors": [4, 3, 1],
+      "citations": [11, 17, 25, 56]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 37,
+    "fields": {
+      "id": "37",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2018,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "37",
+      "authors": [3, 2],
+      "citations": [19, 33]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 38,
+    "fields": {
+      "id": "38",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2018,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 5,
+      "semantic_scholar_id": "38",
+      "authors": [4, 2],
+      "citations": [15, 27, 36]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 39,
+    "fields": {
+      "id": "39",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2018,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "39",
+      "authors": [7, 1],
+      "citations": [31, 32, 38, 54]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 40,
+    "fields": {
+      "id": "40",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2018,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "40",
+      "authors": [5, 6],
+      "citations": [1, 14, 31, 32]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 41,
+    "fields": {
+      "id": "41",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2019,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "41",
+      "authors": [4, 1],
+      "citations": [26, 31, 40]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 42,
+    "fields": {
+      "id": "42",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2019,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "42",
+      "authors": [1],
+      "citations": [33, 34, 37, 38]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 43,
+    "fields": {
+      "id": "43",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2019,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 4,
+      "semantic_scholar_id": "43",
+      "authors": [3],
+      "citations": [32, 38, 39]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 44,
+    "fields": {
+      "id": "44",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2019,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "44",
+      "authors": [6, 7, 8],
+      "citations": [25, 38, 42, 43]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 45,
+    "fields": {
+      "id": "45",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2019,
+      "volume": "1",
+      "title": "TItle",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "45",
+      "authors": [5, 2],
+      "citations": [23, 25, 34, 43, 44, 53]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 46,
+    "fields": {
+      "id": "46",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2020,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "46",
+      "authors": [4, 3, 1],
+      "citations": [38, 41]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 47,
+    "fields": {
+      "id": "47",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2020,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "47",
+      "authors": [2],
+      "citations": [25, 46, 54]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 48,
+    "fields": {
+      "id": "48",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2020,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 0,
+      "semantic_scholar_id": "48",
+      "authors": [1],
+      "citations": [25, 42, 43, 47]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 49,
+    "fields": {
+      "id": "49",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2020,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "49",
+      "authors": [6, 5],
+      "citations": [43, 23]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 50,
+    "fields": {
+      "id": "50",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2020,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "50",
+      "authors": [3],
+      "citations": [23, 33, 41]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 51,
+    "fields": {
+      "id": "51",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2020,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "51",
+      "authors": [7, 8],
+      "citations": [45, 46, 49]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 52,
+    "fields": {
+      "id": "52",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2020,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 0,
+      "semantic_scholar_id": "52",
+      "authors": [2, 1],
+      "citations": [35, 37, 39, 50, 51, 53]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 53,
+    "fields": {
+      "id": "53",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2016,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 2,
+      "semantic_scholar_id": "53",
+      "authors": [10],
+      "citations": [1]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 54,
+    "fields": {
+      "id": "54",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2006,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 3,
+      "semantic_scholar_id": "54",
+      "authors": [11],
+      "citations": [6]
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 55,
+    "fields": {
+      "id": "55",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2008,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "55",
+      "authors": [12],
+      "citations": []
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 56,
+    "fields": {
+      "id": "56",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "Venue",
+      "year": 2013,
+      "volume": "1",
+      "title": "Title",
+      "abstract": "Abstract",
+      "n_citations": 1,
+      "semantic_scholar_id": "56",
+      "authors": [13],
+      "citations": []
+    }
+  }
+]

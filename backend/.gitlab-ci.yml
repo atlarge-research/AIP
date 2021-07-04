@@ -1,0 +1,37 @@
+services:
+  - postgres:13.3
+
+variables:
+  DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/$POSTGRES_DB"
+  POSTGRES_DB: 'postgres'
+  POSTGRES_USER: 'postgres'
+  POSTGRES_PASSWORD: 'postgres'
+  POSTGRES_HOST_AUTH_METHOD: trust
+
+cache:
+  paths:
+    - ~/.cache/pip/
+
+backend_validate:
+  stage: validate
+  script:
+    - apt-get update
+    - apt-get install python3-pip -y
+    - python3 -m pip install --upgrade pip
+    - pip3 install --upgrade setuptools
+    - pip3 install -r backend/requirements.txt
+    - flake8 --exclude='.git,venv,*migrations*,static/lib,tools,parser' .
+  allow_failure: true
+
+backend_test:
+  stage: test
+  script:
+    - apt-get update
+    - apt-get install python3-pip -y
+    - python3 -m pip install --upgrade pip
+    - pip3 install --upgrade setuptools
+    - pip3 install -r backend/requirements.txt
+    - cd backend
+    - python3 manage.py makemigrations
+    - python3 manage.py migrate --settings backend.settings_pipeline
+    - python3 manage.py test --settings backend.settings_pipeline

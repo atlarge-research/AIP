@@ -1,11 +1,9 @@
-*.txt
 *.db
 *.pyc
-*.pdf
-*.png
 *.gexf
 *.jpg
 *.jpeg
+node_modules/
 .ipynb_checkpoints/
 venv/
 unknown_venues_*
@@ -18,3 +16,12 @@ parse_requests/
 query_window.spec
 renew_data.sh
 aip-logs/
+/backend/db.sqlite3
+build/
+data/
+000*
+__pycache__
+.DS_Store
+*_initial.py
+*.tar
+/neodata/databases/neo4j/

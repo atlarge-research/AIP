@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE dblp SYSTEM "dblp.dtd">
+<dblp>
+<article mdate="2020-03-02" key="journals/concurrency/WoodwardJLD09">
+<author>Paul R. Woodward</author>
+<author>Jagan Jayaraj</author>
+<author>Pei-Hung Lin</author>
+<author>William Dai</author>
+<title>First experience of compressible gas dynamics simulation on the Los Alamos roadrunner machine.</title>
+<pages>2160-2175</pages>
+<year>2009</year>
+<volume>21</volume>
+<journal>Concurr. Comput. Pract. Exp.</journal>
+<number>17</number>
+<ee>https://doi.org/10.1002/cpe.1494</ee>
+<url>db/journals/concurrency/concurrency21.html#WoodwardJLD09</url>
+</article>
+<article mdate="2020-03-02" key="journals/concurrency/SubhlokNGR18">
+<author>Jaspal Subhlok</author>
+<author>Hien Nguyen 0004</author>
+<author>Edgar Gabriel</author>
+<author orcid="0000-0002-5603-7043">Mohammad Tanvir Rahman</author>
+<title>Resilient parallel computing on volunteer PC grids.</title>
+<year>2018</year>
+<volume>30</volume>
+<journal>Concurr. Comput. Pract. Exp.</journal>
+<number>18</number>
+<ee>https://doi.org/10.1002/cpe.4478</ee>
+<url>db/journals/concurrency/concurrency30.html#SubhlokNGR18</url>
+</article>
+<article mdate="2020-06-25" key="tr/meltdown/s18" publtype="informal">
+<author>Paul Kocher</author>
+<author>Daniel Genkin</author>
+<author>Daniel Gruss</author>
+<author>Werner Haas 0004</author>
+<author>Mike Hamburg</author>
+<author>Moritz Lipp</author>
+<author>Stefan Mangard</author>
+<author>Thomas Prescher 0002</author>
+<author>Michael Schwarz 0001</author>
+<author>Yuval Yarom</author>
+<title>Spectre Attacks: Exploiting Speculative Execution.</title>
+<journal>meltdownattack.com</journal>
+<year>2018</year>
+<ee type="oa">https://spectreattack.com/spectre.pdf</ee>
+</article>
+</dblp>

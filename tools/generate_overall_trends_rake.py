@@ -19,13 +19,16 @@ with open('venues-mentioning-schedul.csv') as csvfile:
 # Compute the intersection of the two sets to obtain venues mentioning both
 intersection_venue_set = workflow_venue_set.intersection(schedul_venue_set)
 
-conn = sqlite3.connect('/home/lfdversluis/PycharmProjects/parse-semantic-scholar-corpus/dblp_ss.db')
+conn = sqlite3.connect(
+    '/home/lfdversluis/PycharmProjects/parse-semantic-scholar-corpus/dblp_ss'
+    '.db')
 
 c = conn.cursor()
 
 r = Rake(min_length=1, max_length=1)
 
 word_ranks = dict()
+
 
 def remove_string_special_characters(s):
     stripped = re.sub('[^\w\s]', '', s)
@@ -37,8 +40,10 @@ def remove_string_special_characters(s):
 
     return stripped
 
+
 for venue in intersection_venue_set:
-    query = "SELECT * FROM publications WHERE venue = ? and year between 2008 and 2018"
+    query = "SELECT * FROM publications WHERE venue = ? and year between " \
+            "2008 and 2018 "
     res = c.execute(query, [venue])
 
     for row in res:
@@ -55,6 +60,7 @@ for venue in intersection_venue_set:
 
             word_ranks[keyword] += 1
 
-s = [(k, word_ranks[k]) for k in sorted(word_ranks, key=word_ranks.get, reverse=True)]
+s = [(k, word_ranks[k]) for k in
+     sorted(word_ranks, key=word_ranks.get, reverse=True)]
 for k, v in s:
     print(k, v)

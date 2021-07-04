@@ -1,0 +1,28 @@
+cache:
+  paths:
+    - ~/.cache/pip/
+
+parser_validate:
+  stage: validate
+  script:
+    - apt-get update
+    - apt-get install python3-pip -y
+    - python3 -m pip install --upgrade pip
+    - pip3 install --upgrade setuptools
+    - pip3 install -r backend/requirements.txt
+    - cd parser
+    - flake8 --exclude='.git,venv,tools,database_manager.py,renew_data_locally.py,parse_dblp.py,parse_semantic_scholar.py,parse_aminer.py,util.py'
+    - cd ..
+  allow_failure: true
+
+parser_test:
+  stage: test
+  script:
+    - apt-get update
+    - apt-get install python3-pip -y
+    - python3 -m pip install --upgrade pip
+    - pip3 install --upgrade setuptools
+    - pip3 install -r backend/requirements.txt
+    - cd parser
+    - python3 parsing_tests.py
+    - cd ..

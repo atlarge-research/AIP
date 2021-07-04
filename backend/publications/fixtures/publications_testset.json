@@ -1,0 +1,100 @@
+[
+  {
+    "model": "publications.Publications",
+    "pk": 1,
+    "fields": {
+      "id": "1",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "TUD",
+      "year": 2013,
+      "volume": "55",
+      "title": "Computers",
+      "abstract": "Something about computers",
+      "n_citations": 10,
+      "semantic_scholar_id": "55",
+      "authors": []
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 2,
+    "fields": {
+      "id": "2",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "TUE",
+      "year": 2014,
+      "volume": "51",
+      "title": "Computers2",
+      "abstract": "Even more something about computers",
+      "n_citations": 15,
+      "semantic_scholar_id": "34",
+      "authors": []
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 3,
+    "fields": {
+      "id": "3",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "UA",
+      "year": 2005,
+      "volume": "5102",
+      "title": "Systems",
+      "abstract": "Interesting stuff",
+      "n_citations": 23,
+      "semantic_scholar_id": "12",
+      "authors": []
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 4,
+    "fields": {
+      "id": "4",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "TUT",
+      "year": 1999,
+      "volume": "123",
+      "title": "Systems2",
+      "abstract": "Something on bugs",
+      "n_citations": 1000,
+      "semantic_scholar_id": "90",
+      "authors": []
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 5,
+    "fields": {
+      "id": "5",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "TUD",
+      "year": 2002,
+      "volume": "12",
+      "title": "World",
+      "abstract": "How to build boats",
+      "n_citations": 178,
+      "semantic_scholar_id": "345",
+      "authors": []
+    }
+  },
+  {
+    "model": "publications.Publications",
+    "pk": 6,
+    "fields": {
+      "id": "6",
+      "doi": "https://doi.org/10.0000/0000",
+      "venue": "TUE",
+      "year": 2002,
+      "volume": "32",
+      "title": "Zips",
+      "abstract": "Lots on transistors and stuff",
+      "n_citations": 2,
+      "semantic_scholar_id": "111",
+      "authors": []
+    }
+  }
+
+
+]
