@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    ports:
+      - "8000:8000"
+    depends_on:
+      - "web"
+  web:
+    platform: linux/x86_64
+    build: .
+    depends_on:
+      - "db"
+    cap_add:
+      - SYS_ADMIN
+  db:
+    build: ./db
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=aip
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+volumes:
+  db_data:

@@ -1,0 +1,20 @@
+[
+  {
+    "model": "publications.cites",
+    "pk": 1,
+    "fields": {
+      "id": "1",
+      "paper_id": "3",
+      "cited_paper_id": "4"
+    }
+  },
+  {
+    "model": "publications.cites",
+    "pk": 2,
+    "fields": {
+      "id": "2",
+      "paper_id": "8",
+      "cited_paper_id": "7"
+    }
+  }
+]

@@ -1,0 +1,56 @@
+[
+  {
+    "model": "publications.publicationkeywordrelation",
+    "pk": 1,
+    "fields": {
+      "id": "1",
+      "paper": "7",
+      "word_id": "serverless"
+    }
+  },
+  {
+    "model": "publications.publicationkeywordrelation",
+    "pk": 2,
+    "fields": {
+      "id": "2",
+      "paper": "8",
+      "word_id": "serverless"
+    }
+  },
+  {
+    "model": "publications.publicationkeywordrelation",
+    "pk": 3,
+    "fields": {
+      "id": "3",
+      "paper": "9",
+      "word_id": "serverless"
+    }
+  },
+  {
+    "model": "publications.publicationkeywordrelation",
+    "pk": 4,
+    "fields": {
+      "id": "4",
+      "paper": "9",
+      "word_id": "hardware"
+    }
+  },
+    {
+    "model": "publications.publicationkeywordrelation",
+    "pk": 5,
+    "fields": {
+      "id": "5",
+      "paper": "8",
+      "word_id": "systems"
+    }
+  },
+      {
+    "model": "publications.publicationkeywordrelation",
+    "pk": 6,
+    "fields": {
+      "id": "6",
+      "paper": "4",
+      "word_id": "systems"
+    }
+  }
+]

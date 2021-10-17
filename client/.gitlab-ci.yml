@@ -1,0 +1,16 @@
+client_validate:
+  stage: validate
+  script:
+    - cd client
+    - npm ci
+    - npm run prettier:check
+  allow_failure: true
+
+client_test:
+  stage: test
+  script:
+    - cd client
+    - npm ci
+    - npm run build
+    - npm test
+

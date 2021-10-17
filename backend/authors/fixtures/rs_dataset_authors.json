@@ -1,0 +1,119 @@
+[
+  {
+    "model": "authors.Authors",
+    "pk": 1,
+    "fields": {
+      "name": "Senior Researcher 1",
+      "orcid": "1111-1111-1111-1111",
+      "first_publication_year": 2005
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 2,
+    "fields": {
+      "name": "Senior Researcher 2",
+      "orcid": "2222-2222-2222-2222",
+      "first_publication_year": 2008
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 3,
+    "fields": {
+      "name": "Rising Star 1",
+      "orcid": "3333-3333-3333-3333",
+      "first_publication_year": 2016
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 4,
+    "fields": {
+      "name": "Rising Star 2",
+      "orcid": "4444-4444-4444-4444",
+      "first_publication_year": 2017
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 5,
+    "fields": {
+      "name": "Stable Author 1",
+      "orcid": "5555-5555-5555-5555",
+      "first_publication_year": 2017
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 6,
+    "fields": {
+      "name": "Stable Author 2",
+      "orcid": "6666-6666-6666-6666",
+      "first_publication_year": 2013
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 7,
+    "fields": {
+      "name": "Stable Author 3",
+      "orcid": "7777-7777-7777-7777",
+      "first_publication_year": 2005
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 8,
+    "fields": {
+      "name": "Stable Author 4",
+      "orcid": "8888-8888-8888-8888",
+      "first_publication_year": 2005
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 9,
+    "fields": {
+      "name": "Declining Author",
+      "orcid": "9999-9999-9999-9999",
+      "first_publication_year": 2006
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 10,
+    "fields": {
+      "name": "Another Author Who Started Publishing in 2016",
+      "orcid": "1010-1010-1010-1010",
+      "first_publication_year": 2016
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 11,
+    "fields": {
+      "name": "Another Author Who Started Publishing in 2006",
+      "orcid": "1111-1111-1111-111X",
+      "first_publication_year": 2006
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 12,
+    "fields": {
+      "name": "Another Author Who Started Publishing in 2008",
+      "orcid": "1212-1212-1212-1212",
+      "first_publication_year": 2008
+    }
+  },
+    {
+    "model": "authors.Authors",
+    "pk": 13,
+    "fields": {
+      "name": "Another Author Who Started Publishing in 2013",
+      "orcid": "1313-1313-1313-1313",
+      "first_publication_year": 2013
+    }
+  }
+]

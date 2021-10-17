@@ -1,3 +1,31 @@
+# AIP++
+
+The full documentation of our application can be found at 
+https://cutt.ly/Mn78T3f
+### Running the application locally using Docker
+
+
+1. Make sure you have Docker installed and running on your machine.
+
+2. Run 'docker-compose up' command in the root directory of the project.
+
+3. Access the application through your web browser by going to 
+'http://localhost:8000/'.
+   
+### Accessing the application remotely
+
+The most recent version of the application can be accessed at 
+https://aip.irqize.dev/
+
+----------------------------------------------------------------------------
+####Useful tips:
+
+Use 'docker-compose up --build' to rebuild your project. This is useful, if you
+want to update the application after pulling it from git.
+
+If you want to update the database, run docker volume ls' to find the name of
+the volume containing the database and delete it using 
+'docker volume rm <volume_name>' command.
 # AIP
 <ins>A</ins>rticle <ins>I</ins>nformation <ins>P</ins>arser is an instrument to parse, unify, and in some cases correct article meta-data. 
 AIP creates a PostgreSQL database that allows for easily finding related work.
@@ -24,74 +52,3 @@ AIP tackles several non-trivial challenges in unifying these datasets:
 3. Despite all data sources having a format specified, we encountered several instances where the format specified is not adhered to, or the data is malformed.
 4. Venue strings being different among these sources. Some sources use an abbreviation, some use a BibTeX string, etc. AIP maps all these occurrences to the same abbreviation.
 5. Complementing existing entries. For example, DBLP does not offer abstracts whilst Semantic Scholar and AMiner do.
-
-## How to run AIP
-
-We developed two useful scripts to run AIP and generate the database using raw datasources:
-1. [A script to renew the data on a local (single) machine](https://github.com/atlarge-research/AIP/blob/master/renew_data_locally.py)
-2. [A script to renew the data on a distributed system having a SLURM scheduler (managed by Dask)](https://github.com/atlarge-research/AIP/blob/master/renew_data_dask.py)
-
-The steps to run AIP are as followed:
-1. Clone this repository.
-2. Update PostgreSQL settings in [database_manager.py](https://github.com/atlarge-research/AIP/blob/master/database_manager.py)
-3. Download released datasets from three sources and store them in a directory.
-4. Run either one of the two scripts mentioned earlier or run separately [parse_dblp.py](https://github.com/atlarge-research/AIP/blob/master/parse_dblp.py), [parse_semantic_scholar.py](https://github.com/atlarge-research/AIP/blob/master/parse_semantic_scholar.py), or [parse_aminer.py](https://github.com/atlarge-research/AIP/blob/master/parse_aminer.py) using as argument to root of the data.
-
-
-
-Have a look at which argument each script accepts (such as file locations) for more options.
-
-# AIP database structure
-
-The database file contains the following tables:
-
-__publications__
-| Column name | Explanation                                                                        |
-|-------------|------------------------------------------------------------------------------------|
-| id          | A unique id for the paper, usually the ID assigned by DBLP.                        |
-| venue       | The abbreviation of the venue the article was accepted at.                         |
-| year        | The publishing year.                                                               |
-| volume      | (Optional) the volume of the journal the article it was included in.               |
-| title       | The title of the article.                                                          |
-| doi         | The DOI of the article, in case there are multiple, the first one is usually used. |
-| abstract    | The abstract of the article (if present in one of the datasets).                   |
-| n_citations | The number of times this article has been cited.                                   |
-
-__authors__
-| Column name | Explanation                                                  |
-|-------------|--------------------------------------------------------------|
-| id          | A unique identifier per author, this is the id used by DBLP. |
-| name        | The full name of the author.                                 |
-| orcid       | The ORCID of the author if known.                            |
-
-__author_paper_pairs__ this is a table to make a link between authors and publications. We are aware of the use of `paper` rather than `article` (legacy).
-| Column name | Explanation                                    |
-|-------------|------------------------------------------------|
-| author_id   | A id of an author.                             |
-| paper_id    | The id of an article the author (co-)authored. |
-
-__cites__ is currently not used, this table will contain in the future two article ids: which paper cited which.
-
-__properties__
-| Column name       | Explanation                                                                                                                                  |
-|-------------------|----------------------------------------------------------------------------------------------------------------------------------------------|
-| last_modified     | The data when the contents of the database were last altered.                                                                                |
-| version           | The version of the database content, whenever a script modifies the database, after being done, this counter should be incremented.          |
-| db_schema_version | The version of the database schema. We use this to incrementally alter the database (adding indices, modifying/deleting/adding tables, etc.) |
-
-
-
-
-
-## Query Example
-The following SQL command returns papers from 2011 onwards with keywords `performance analysis quality` in either title or abstract, sorted by year in descending order.
-```
-SELECT * FROM publications WHERE year >= 2011
-AND (lower(title) LIKE '%performance%' 
-	OR lower(abstract) LIKE '%performance%')
-AND (lower(title) LIKE '%analysis%'
-	OR lower(abstract) LIKE '%analysis%')
-AND (lower(title) LIKE '%quality%'
-	OR lower(abstract) LIKE '%quality%')
-ORDER BY year DESC
-```

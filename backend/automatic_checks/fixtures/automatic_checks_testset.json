@@ -1,0 +1,14 @@
+[
+  {
+    "model": "automatic_checks.Properties",
+    "pk": 1,
+    "fields": {
+      "last_modified": "2021-06-09T00:00:00",
+      "db_schema_version": 10,
+      "version": 6066,
+      "dblp_version": "2019-05-01",
+      "semantic_scholar_version": "2021-06-01",
+      "aminer_mag_version": "2020-11-01"
+    }
+  }
+]
