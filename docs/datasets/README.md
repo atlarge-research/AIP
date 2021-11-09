@@ -8,7 +8,7 @@ In order to update the database you must download all 4 data sources and parse t
 
    ![img2.png](images/img2.png)
    
-3. Add 3 new folders one for semantic scholar, one for mag and one for aminer data sources, adding the date into the folder name is optional, but it should look like this:
+3. Add three new folders. One for Semantic Scholar, one for MAG, and one for Aminer. Adding the data to the folder is optional, but if you do it should look like this:
 
    ![img.png](images/img.png)
 

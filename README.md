@@ -14,9 +14,9 @@ More information on how this tool works can be found in the [project report](htt
 
 :fire: Please read this section before continuing :fire:
 
-In order to run the following application, make sure that you have [Docker](https://www.docker.com/products/docker-desktop).
+To run AIP, make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed.
 
-It is also important that you have a recent version of the database which can be obtained by contacting us directly. You can also generate your own database by following the instructions [here](backend/automatic_checks/automatic_check_readme.md).
+It is also important that you have a recent version of the database which can be obtained by contacting us directly. You can also generate your own database by following the instructions [here](docs/datasets/README.md).
 
 ### Running the application locally using Docker
 
