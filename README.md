@@ -18,9 +18,9 @@ The most recent version of the application can be accessed at
 https://aip.irqize.dev/
 
 ----------------------------------------------------------------------------
-####Useful tips:
+#### Useful tips:
 
-Use 'docker-compose up --build' to rebuild your project. This is useful, if you
+Use `docker-compose up --build` to rebuild your project. This is useful, if you
 want to update the application after pulling it from git.
 
 If you want to update the database, run docker volume ls' to find the name of
