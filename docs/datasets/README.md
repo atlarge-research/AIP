@@ -1,3 +1,5 @@
+# Generating an AIP database
+
 Disclaimer: to update the database one would need around 1TB of storage available and about 30h of computation time. 
 
 In order to update the database you must download all 4 data sources and parse them. 
