@@ -19,9 +19,7 @@ aip-logs/
 /backend/db.sqlite3
 build/
 data/
-000*
 __pycache__
 .DS_Store
-*_initial.py
 *.tar
 /neodata/databases/neo4j/
