@@ -1,45 +1,55 @@
 # AIP++
 
-The full documentation of our application can be found at 
-https://cutt.ly/Mn78T3f
+> A Software Tool for Finding Related Work in Academia
+
+<ins>A</ins>rticle <ins>I</ins>nformation <ins>P</ins>arser is an instrument to parse, unify, and in some cases correct article metadata. AIP creates a PostgreSQL database that allows for easily finding related work. AIP++ is an extension of the original tool to improve on the article discovery and querying capabilities of the original tool.
+
+More information on how this tool works can be found in the [project report](docs/pdfs/5C_group_final_report.pdf).
+
+![Web UI screenshot](docs/images/web-ui-screenshot.png)
+
+## Setup
+
+### Prerequisites
+
+:fire: Please read this section before continuing :fire:
+
+To run AIP, make sure you have [Docker Desktop](https://www.docker.com/products/docker-desktop) installed.
+
+It is also important that you have a recent version of the database which can be obtained by contacting us directly. You can also generate your own database by following the instructions [here](docs/datasets/README.md).
+
 ### Running the application locally using Docker
 
+0. Ensure you have a recent database dump called `data.backup` in the `db` folder of this repository.
 
-1. Make sure you have Docker installed and running on your machine.
+1. Build and run the Docker containers to run this project.
+```sh
+$ docker-compose up --build -d
+```
 
-2. Run 'docker-compose up' command in the root directory of the project.
-
-3. Access the application through your web browser by going to 
-'http://localhost:8000/'.
+2. Access the application through your web browser by going to http://localhost:8000
    
-### Accessing the application remotely
-
-The most recent version of the application can be accessed at 
-https://aip.irqize.dev/
-
-----------------------------------------------------------------------------
-#### Useful tips:
+### Useful tips
 
 Use `docker-compose up --build` to rebuild your project. This is useful, if you
 want to update the application after pulling it from git.
 
-If you want to update the database, run docker volume ls' to find the name of
-the volume containing the database and delete it using 
-'docker volume rm <volume_name>' command.
-# AIP
-<ins>A</ins>rticle <ins>I</ins>nformation <ins>P</ins>arser is an instrument to parse, unify, and in some cases correct article meta-data. 
-AIP creates a PostgreSQL database that allows for easily finding related work.
+If you want to update the database, you will have to remove the database volume by: 
+1. Shutting down all containers with: `docker-compose down`.
+2. Find the appropriate Docker volume which you can find using `docker volume ls`. It is prefixed with the name of the root folder (usually `aip`) and ends with `_db_data`.
+3. Removing the previously mentioned volume with `docker volume rm <volume_name>`
 
-Developing such a database is tricky, an excerpt of [our article introducing this instrument](https://arxiv.org/abs/2004.10077):
-```
-Current information sources do not cover the spectrum of the systems community entirely.
-For example, DBLP -- which specifically focuses on computer science articles -- lacks certain venues and does not record article abstracts.
-Other datasets such as Semantic Scholar and AMiner have similar and other limitations.
+
+## Rationale
+
+Managing a database of article metadata is tricky, as highlighted by an excerpt from [our article introducing AIP](https://arxiv.org/abs/2004.10077):
+
+> Current information sources do not cover the spectrum of the systems community entirely. For example, DBLP -- which specifically focuses on computer science articles -- lacks certain venues and does not record article abstracts.  Other datasets such as Semantic Scholar and AMiner have similar and other limitations.
 Moreover, these datasets also overlap, yet contain important information the others do not offer; they are disjoint.
 Our approach is to parse each dataset and filter and unify the information provided.
-```
 
-This instrument combines three data sources: [DBLP](https://dblp.uni-trier.de/faq/How+can+I+download+the+whole+dblp+dataset), [Semantic Scholar](https://api.semanticscholar.org/corpus/download/), and [AMiner](https://www.aminer.cn/oag2019), which we filter and store in a PostgreSQL database.
+AIP combines three data sources, namely [DBLP](https://dblp.uni-trier.de/faq/How+can+I+download+the+whole+dblp+dataset), [Semantic Scholar](https://api.semanticscholar.org/corpus/download/), and [AMiner](https://www.aminer.cn/oag2019).
+
 DBLP is a well-known European archive that focuses on computer science and features all the top-level venues (journals and conferences).
 Semantic Scholar is an American project created by the Allen Institute for AI.
 The project aims to analyze and extract important data from scientific publications.
