@@ -4,7 +4,7 @@
 
 <ins>A</ins>rticle <ins>I</ins>nformation <ins>P</ins>arser is an instrument to parse, unify, and in some cases correct article metadata. AIP creates a PostgreSQL database that allows for easily finding related work. AIP++ is an extension of the original tool to improve on the article discovery and querying capabilities of the original tool.
 
-More information on how this tool works can be found in the [project report](https://drive.google.com/file/d/1OUJvakiJYdlw-jV2ZKjDs5ggCNi2DyiW/view).
+More information on how this tool works can be found in the [project report](docs/pdfs/5C_group_final_report.pdf).
 
 ![Web UI screenshot](docs/images/web-ui-screenshot.png)
 
