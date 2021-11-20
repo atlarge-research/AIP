@@ -1,34 +1,31 @@
 # Generating an AIP database
 
-Disclaimer: to update the database one would need around 1TB of storage available and about 30h of computation time. 
+Disclaimer: The datasets are on the order of several 100 GBs and take a significant amount to process and import into a PostgreSQL database.
 
 In order to update the database you must download all 4 data sources and parse them. 
 
-1. Create a new folder where all the input files will be stored
+1. Create a new folder in the root of the repository where all the input files will be stored with the following command:
+    ```sh
+    $ export DOWNLOAD_DATE=$(date +'%d_%m_%Y')
+    $ mkdir -p datasets/{dblp,s2-corpus,aminer,mag}_$DOWNLOAD_DATE
+    ```
 
-2. Go to https://dblp.uni-trier.de/xml/ and download the `dblp.xml.gz` and `dblp.dtd` files
-
-   ![img2.png](images/img2.png)
+2. Download the [DBLP](https://dblp.uni-trier.de/xml/) dataset (`dblp.xml.gz` and `dblp.dtd`):
+    ```sh
+    $ wget -P datasets/dblp_$DOWNLOAD_DATE https://dblp.uni-trier.de/xml/{dblp.xml.gz,dblp.dtd}
+    ```
    
-3. Add three new folders. One for Semantic Scholar, one for MAG, and one for Aminer. Adding the data to the folder is optional, but if you do it should look like this:
+3. Download the [Open Academic Graph](https://www.aminer.org/open-academic-graph) dataset which contains the Aminer and MAG papers using the following commands:
 
-   ![img.png](images/img.png)
+    ```sh
+    $ wget -P datasets/aminer_$DOWNLOAD_DATE https://www.aminer.cn/download_data\?link\=oag-2-1/aminer/paper/aminer_papers_{0..5}.zip
+    $ wget -P datasets/mag_$DOWNLOAD_DATE https://www.aminer.cn/download_data\?link\=oag-2-1/mag/paper/mag_papers_{0..16}.zip
+    ```
 
-
-4. Go to https://www.aminer.org/open-academic-graph click the latest version available and download all the aminer_papers and mag_papers files, placing them in the aminer and mag directories respectively
-
+   This will download the following files:
    ![img1.png](images/img1.png)
 
-5. Go to: http://s2-public-api.prod.s2.allenai.org/corpus/download/ and download all the files by using the `wget` command on your terminal.
-    - Open up the terminal and navigate to the right (s2-corpus directory)
-    - Download the manifest text file using the following command:
-      ```sh
-      wget https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/2021-06-01/manifest.txt
-      ```
-    - Run the following command to download the actual data types. Remember to change the date (here 2021-06-01) to the most recent one available.
-      ```sh
-      wget -B https://s3-us-west-2.amazonaws.com/ai2-s2-research-public/open-corpus/2021-06-01/ -i manifest.txt
-      ```
+4. Download the Semantic Scholar dataset by following the [instructions](https://api.semanticscholar.org/corpus/download/) to get the latest corpus and store the files in the `s2-corpus_$DOWNLOAD_DATE` directory.
 
 6. After downloading all the files, unzip them.
 
