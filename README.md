@@ -1,4 +1,4 @@
-# AIP++
+# AIP
 
 > A Software Tool for Finding Related Work in Academia
 
