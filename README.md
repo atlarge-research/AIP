@@ -20,22 +20,22 @@ It is also important that you have a recent version of the database which can be
 
 ### Running the application locally using Docker
 
-0. Ensure you have a recent database dump called `data.backup` in the `db` folder of this repository.
+1. Ensure you have a recent database dump called `data.backup` in the `services/db` folder of this repository.
 
-1. Build and run the Docker containers to run this project.
+2. Build and run the Docker containers to run this project.
 ```sh
-$ docker-compose up --build -d
+$ docker compose up --build -d
 ```
 
-2. Access the application through your web browser by going to http://localhost:8000
+3. Access the application through your web browser by going to http://localhost:8000
    
 ### Useful tips
 
-Use `docker-compose up --build` to rebuild your project. This is useful, if you
+Use `docker compose up --build` to rebuild your project. This is useful, if you
 want to update the application after pulling it from git.
 
 If you want to update the database, you will have to remove the database volume by: 
-1. Shutting down all containers with: `docker-compose down`.
+1. Shutting down all containers with: `docker compose down`.
 2. Find the appropriate Docker volume which you can find using `docker volume ls`. It is prefixed with the name of the root folder (usually `aip`) and ends with `_db_data`.
 3. Removing the previously mentioned volume with `docker volume rm <volume_name>`
 
