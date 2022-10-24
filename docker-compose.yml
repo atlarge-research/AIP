@@ -13,6 +13,13 @@ services:
   backend:
     build:
       context: ./services/backend
+    environment:
+      - DEBUG=True
+      - POSTGRES_DB=aip
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
+      - POSTGRES_PORT=5432
     depends_on:
       - db
     cap_add:
