@@ -16,7 +16,8 @@ jobs:
       uses: actions/setup-node@v3
       with:
         node-version: 16
-        cache: 'yarn'
+        cache: "yarn"
+        cache-dependency-path: "services/frontend/yarn.lock"
     - name: Install packages
       run: yarn install --frozen-lockfile --immutable
       working-directory: services/frontend
