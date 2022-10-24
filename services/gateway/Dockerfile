@@ -4,8 +4,8 @@ WORKDIR /code
 
 COPY ./frontend /code/
 
-RUN npm ci
-RUN npm run build
+RUN yarn install --frozen-lockfile
+RUN yarn build
 
 FROM nginx:latest as server
 

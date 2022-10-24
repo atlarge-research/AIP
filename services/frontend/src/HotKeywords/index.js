@@ -8,21 +8,21 @@ import {
   TextField,
   Button,
   Tooltip,
-} from "@material-ui/core";
-import InfoIcon from "@material-ui/icons/Info";
+} from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
 
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Checkbox from "@mui/material/Checkbox";
 import routes from "../routes";
 import { useHistory } from "react-router-dom";
 import defaultValues from "../VisualQuerying/filterDefaultValues";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import Paper from "@material-ui/core/Paper";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 import InfoDialog from "./InfoDialog";
 
@@ -91,7 +91,7 @@ const HotKeywords = () => {
             variant="contained"
             onClick={() => setShowInfo(true)}
             aria-label="show sql quries"
-          >
+            size="large">
             <InfoIcon />
           </IconButton>
         </Tooltip>

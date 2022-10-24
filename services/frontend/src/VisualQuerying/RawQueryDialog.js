@@ -7,9 +7,10 @@ import {
   Button,
   TextField,
   Box,
-  makeStyles,
-} from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+  Alert,
+} from "@mui/material";
+
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles((_) => ({
   input: {
@@ -42,9 +43,9 @@ const RawQueryDialog = ({ opened, setOpened, onSubmit, error }) => {
         />
         {error && (
           <Box mt={1} mb={1}>
-            <MuiAlert elevation={6} variant="filled" severity="error">
+            <Alert elevation={6} variant="filled" severity="error">
               {error}
-            </MuiAlert>
+            </Alert>
           </Box>
         )}
       </DialogContent>

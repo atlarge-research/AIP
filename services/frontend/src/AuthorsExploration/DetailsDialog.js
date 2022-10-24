@@ -5,12 +5,12 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-} from "@material-ui/core";
-import { DataGrid } from "@material-ui/data-grid";
-import Button from "@material-ui/core/Button";
+} from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import Button from "@mui/material/Button";
 import routes from "../routes";
 import defaultValues from "../VisualQuerying/filterDefaultValues";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
   dialog: {

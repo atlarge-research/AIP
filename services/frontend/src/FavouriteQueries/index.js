@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useMemo } from "react";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
-import AccordionDetails from "@material-ui/core/AccordionDetails";
-import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import Button from "@material-ui/core/Button";
-import useTheme from "@material-ui/core/styles/useTheme";
-import Tooltip from "@material-ui/core/Tooltip";
-import IconButton from "@material-ui/core/IconButton";
-import TextField from "@material-ui/core/TextField";
-import makeStyles from "@material-ui/core/styles/makeStyles";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Accordion from "@mui/material/Accordion";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import Button from "@mui/material/Button";
+import useTheme from "@mui/material/styles/useTheme";
+import Tooltip from "@mui/material/Tooltip";
+import IconButton from "@mui/material/IconButton";
+import TextField from "@mui/material/TextField";
+import makeStyles from "@mui/styles/makeStyles";
 
 import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
 import { useHistory } from "react-router-dom";
@@ -19,8 +19,8 @@ import json from "react-syntax-highlighter/dist/esm/languages/hljs/json";
 import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import moment from "moment";
 
-import PublishIcon from "@material-ui/icons/Publish";
-import GetAppIcon from "@material-ui/icons/GetApp";
+import PublishIcon from "@mui/icons-material/Publish";
+import GetAppIcon from "@mui/icons-material/GetApp";
 
 import { exportToJson } from "./jsonFunctions";
 
@@ -141,7 +141,7 @@ const FavouriteQueries = () => {
                 </Button>
                 <Button
                   variant="contained"
-                  color={theme.palette.type === "light" ? "primary" : "default"}
+                  color={theme.palette.mode === "light" ? "primary" : "default"}
                   onClick={() => executeRawQuery(query.query)}
                 >
                   Execute
@@ -179,7 +179,7 @@ const FavouriteQueries = () => {
                 </Button>
                 <Button
                   variant="contained"
-                  color={theme.palette.type === "light" ? "primary" : "default"}
+                  color={theme.palette.mode === "light" ? "primary" : "default"}
                   onClick={() => executeFilterQuery(query.query)}
                 >
                   Execute
@@ -229,7 +229,7 @@ const FavouriteQueries = () => {
               onClick={() => exportToJson(queries)}
               disabled={!queries.length}
               aria-label="show sql quries"
-            >
+              size="large">
               <GetAppIcon />
             </IconButton>
           </Tooltip>
@@ -241,7 +241,7 @@ const FavouriteQueries = () => {
               variant="contained"
               onClick={() => setShowID(true)}
               aria-label="show sql quries"
-            >
+              size="large">
               <PublishIcon />
             </IconButton>
           </Tooltip>
