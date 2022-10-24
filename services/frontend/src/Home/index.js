@@ -9,16 +9,15 @@ import {
   List,
   ListItem,
   ListItemText,
-  makeStyles,
   Tooltip,
   IconButton,
   Button,
-} from "@material-ui/core";
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
 import moment from "moment";
-import RefreshIcon from "@material-ui/icons/Refresh";
+import RefreshIcon from "@mui/icons-material/Refresh";
 import { apiCall, apiCallFresh } from "./apiCalls";
 import pdf from "./update_instructions.pdf";
-console.log(pdf);
 
 const useStyles = makeStyles({
   cards: {
@@ -132,7 +131,7 @@ const Home = () => {
                 onClick={checkUpdates}
                 aria-label="updates"
                 disabled={updateLoading}
-              >
+                size="large">
                 <RefreshIcon className={updateLoading ? classes.rotate : ""} />
               </IconButton>
             </Tooltip>

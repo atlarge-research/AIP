@@ -7,7 +7,7 @@ import {
   Button,
   Box,
   Typography,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const ImportDialog = ({ showInfo, setShowInfo }) => {
   return (

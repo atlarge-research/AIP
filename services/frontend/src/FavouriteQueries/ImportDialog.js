@@ -6,7 +6,7 @@ import {
   DialogActions,
   Button,
   Box,
-} from "@material-ui/core";
+} from "@mui/material";
 
 const ImportDialog = ({ showID, setShowID, onSave }) => {
   const [selectedFile, setSelectedFile] = useState("");

@@ -1,23 +1,23 @@
 import React, { useState } from "react";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import { LinearProgress } from "@material-ui/core";
-import { DataGrid } from "@material-ui/data-grid";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { LinearProgress } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
+import InputLabel from "@mui/material/InputLabel";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 import {
   OutlinedInput,
   InputAdornment,
   IconButton,
   Paper,
   Chip,
-  makeStyles,
-} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
+} from "@mui/material";
+import { makeStyles } from "@mui/styles";
+import AddIcon from "@mui/icons-material/Add";
 
 import { apiCall } from "./apiCall";
 
@@ -177,7 +177,7 @@ const RisingStars = () => {
               }}
               endAdornment={
                 <InputAdornment position="end">
-                  <IconButton onClick={() => addKeyword()} edge="end">
+                  <IconButton onClick={() => addKeyword()} edge="end" size="large">
                     <AddIcon />
                   </IconButton>
                 </InputAdornment>

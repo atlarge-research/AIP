@@ -1,22 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import Box from "@material-ui/core/Box";
-import Typography from "@material-ui/core/Typography";
-import { LinearProgress } from "@material-ui/core";
-import Snackbar from "@material-ui/core/Snackbar";
-import MuiAlert from "@material-ui/lab/Alert";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import { LinearProgress } from "@mui/material";
+import Snackbar from "@mui/material/Snackbar";
+import Alert from "@mui/material/Alert";
+import TextField from "@mui/material/TextField";
+import Button from "@mui/material/Button";
 import { apiCall } from "./apiCall";
 import * as d3 from "d3";
 import { linkArc } from "./d3functions";
-import useTheme from "@material-ui/core/styles/useTheme";
+import useTheme from "@mui/material/styles/useTheme";
 import DetailsDialog from "./DetailsDialog";
-import InputLabel from "@material-ui/core/InputLabel";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import InputLabel from "@mui/material/InputLabel";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
   formControl: {
@@ -350,7 +350,7 @@ const AuthorsExploration = () => {
         .clone(true)
         .lower()
         .attr("fill", "none")
-        .attr("stroke", theme.palette.type === "light" ? "white" : "black")
+        .attr("stroke", theme.palette.mode === "light" ? "white" : "black")
         .attr("stroke-width", 3);
     }
 
@@ -491,7 +491,7 @@ const AuthorsExploration = () => {
       ) : null}
       {!loading && data ? <svg ref={svgRef} /> : null}
       <Snackbar open={alertOpened} autoHideDuration={6000} onClose={closeAlert}>
-        <MuiAlert
+        <Alert
           elevation={6}
           variant="filled"
           onClose={closeAlert}
@@ -499,7 +499,7 @@ const AuthorsExploration = () => {
           key={alert}
         >
           {alert}
-        </MuiAlert>
+        </Alert>
       </Snackbar>
     </div>
   );

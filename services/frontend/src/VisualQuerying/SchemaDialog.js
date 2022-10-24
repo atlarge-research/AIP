@@ -5,7 +5,7 @@ import {
   DialogContent,
   DialogActions,
   Button,
-} from "@material-ui/core";
+} from "@mui/material";
 import schemaIMG from "./db_schema_client.png";
 
 const SchemaDialog = ({ showSchema, setShowSchema }) => {

@@ -6,20 +6,20 @@ import {
   LinearProgress,
   Snackbar,
   Tooltip,
-} from "@material-ui/core";
-import MuiAlert from "@material-ui/lab/Alert";
+  Alert,
+} from "@mui/material";
 import { useLocation } from "react-router-dom";
 import moment from "moment";
 import { addFavouriteQuery } from "../FavouriteQueries/localStorageHelper";
 
 // Icons
-import FilterListIcon from "@material-ui/icons/FilterList";
-import BuildIcon from "@material-ui/icons/Build";
-import HelpIcon from "@material-ui/icons/Help";
-import InfoIcon from "@material-ui/icons/Info";
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import FavoriteIcon from "@material-ui/icons/Favorite";
-import SaveIcon from "@material-ui/icons/Save";
+import FilterListIcon from "@mui/icons-material/FilterList";
+import BuildIcon from "@mui/icons-material/Build";
+import HelpIcon from "@mui/icons-material/Help";
+import InfoIcon from "@mui/icons-material/Info";
+import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import SaveIcon from "@mui/icons-material/Save";
 
 import exportToCsv from "./exportToCsv";
 import { apiCallFilter, apiCallRaw } from "./apiCalls";
@@ -217,7 +217,7 @@ const VisualQuerying = () => {
               variant="contained"
               onClick={() => setShowSchema(true)}
               aria-label="show database schema"
-            >
+              size="large">
               <HelpIcon />
             </IconButton>
           </Tooltip>
@@ -227,7 +227,7 @@ const VisualQuerying = () => {
                 variant="contained"
                 onClick={() => setShowRawQueries(true)}
                 aria-label="show sql quries"
-              >
+                size="large">
                 <InfoIcon />
               </IconButton>
             </Tooltip>
@@ -237,7 +237,7 @@ const VisualQuerying = () => {
             onClick={() => setShowFQD(true)}
             disabled={querySaved}
             aria-label="save query"
-          >
+            size="large">
             {querySaved ? (
               <FavoriteIcon />
             ) : (
@@ -258,7 +258,7 @@ const VisualQuerying = () => {
               }}
               aria-label="export csv"
               disabled={!data.length || loading}
-            >
+              size="large">
               <SaveIcon />
             </IconButton>
           </Tooltip>
@@ -268,7 +268,7 @@ const VisualQuerying = () => {
                 variant="contained"
                 onClick={() => setRawQueryDialogOpened(true)}
                 aria-label="run sql query"
-              >
+                size="large">
                 <BuildIcon />
               </IconButton>
             </Tooltip>
@@ -277,7 +277,7 @@ const VisualQuerying = () => {
                 variant="contained"
                 onClick={() => setFiltersOpen(true)}
                 aria-label="filter list"
-              >
+                size="large">
                 <FilterListIcon />
               </IconButton>
             </Tooltip>
@@ -304,7 +304,7 @@ const VisualQuerying = () => {
       )}
 
       <Snackbar open={alertOpened} autoHideDuration={6000} onClose={closeAlert}>
-        <MuiAlert
+        <Alert
           elevation={6}
           variant="filled"
           onClose={closeAlert}
@@ -312,7 +312,7 @@ const VisualQuerying = () => {
           key={alert}
         >
           {alert}
-        </MuiAlert>
+        </Alert>
       </Snackbar>
     </div>
   );
