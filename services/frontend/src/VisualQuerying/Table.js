@@ -10,6 +10,7 @@ import {
   TableSortLabel,
   Button,
   useTheme,
+  Link,
 } from "@mui/material";
 import columns from "./columns";
 
@@ -27,8 +28,6 @@ const CustomTable = ({
   setShowAbstract,
   setShowAuthors,
 }) => {
-  const theme = useTheme();
-
   return <>
     <TableContainer>
       <Table>
@@ -80,12 +79,12 @@ const CustomTable = ({
                   ))}
                 <TableCell>
                   {row.doi ? (
-                    <a
+                    <Link
                       href={"https://www.doi.org/" + row.doi}
                       target="__blank"
                     >
                       {row.doi}
-                    </a>
+                    </Link>
                   ) : (
                     "-"
                   )}
@@ -94,9 +93,7 @@ const CustomTable = ({
                   {row["authors"] && row["authors"].length > 0 ? (
                     <Button
                       variant="contained"
-                      color={
-                        theme.palette.mode === "light" ? "primary" : "default"
-                      }
+                      color="info"
                       onClick={() => {
                         setCurrentArticle(row);
                         setShowAuthors(true);
@@ -112,9 +109,7 @@ const CustomTable = ({
                   {row["abstract"] ? (
                     <Button
                       variant="contained"
-                      color={
-                        theme.palette.mode === "light" ? "primary" : "default"
-                      }
+                      color="info"
                       onClick={() => {
                         setCurrentArticle(row);
                         setShowAbstract(true);

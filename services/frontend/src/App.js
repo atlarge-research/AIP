@@ -53,10 +53,10 @@ const useStyles = makeStyles({
   list: {
     width: 250,
   },
-  link: {
-    textDecoration: "none",
-    color: "inherit",
-  },
+  // link: {
+  //   textDecoration: "none",
+  //   color: "inherit",
+  // },
 });
 
 const App = () => {
@@ -138,7 +138,7 @@ const App = () => {
                   </ListItemIcon>
                   <ListItemText primary="Favourite Queries"></ListItemText>
                 </ListItem>
-                <ListItem
+                {/* <ListItem
                   button
                   component={NavLink}
                   to={routes.risingStars}
@@ -174,7 +174,7 @@ const App = () => {
                     <WhatshotOutlinedIcon />
                   </ListItemIcon>
                   <ListItemText primary="Hot Keywords"></ListItemText>
-                </ListItem>
+                </ListItem> */}
               </List>
             </div>
           </Drawer>
