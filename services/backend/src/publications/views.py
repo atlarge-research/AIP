@@ -58,24 +58,3 @@ class PublicationViewSet(viewsets.ReadOnlyModelViewSet):
         if isinstance(response.data, OrderedDict):
             response.data['raw_query'] = connection.queries
         return response
-
-
-@api_view(['GET'])
-@renderer_classes([JSONRenderer])
-def perform_raw_sql(request):
-    # Make default query return all publications
-    raw_sql = str(request.query_params.get('sql',
-                                           'SELECT * FROM '
-                                           + 'publications_publication;'))
-    with connection.cursor() as cursor:
-        cursor.execute(raw_sql)
-
-        queryset = cursor.fetchall()
-        field_names = cursor.description
-
-        # as seen in this post:
-        # https://stackoverflow.com/questions/32166217/passing-a-cursor-to-a-serializer-in-django-rest-framework
-        dictionary = [dict(zip([field[0] for field in field_names], row))
-                      for row in queryset]
-
-    return Response(dictionary)

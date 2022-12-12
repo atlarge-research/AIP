@@ -13,19 +13,16 @@ services:
   backend:
     build:
       context: ./services/backend
-      target: development
+      target: production
     environment:
-      - DEBUG=True
-      - SECRET_KEY=django-insecure-&+c4^@8944!k26-c@u@@v697@n-lu&)c)%esj)t(4ti1qeqw3&
+      - SECRET_KEY=${SECRET_KEY}
       - POSTGRES_DB=aip
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_HOST=db
       - POSTGRES_PORT=5432
     depends_on:
       - db
-    cap_add:
-      - SYS_ADMIN
 
   db:
     build: ./services/db
@@ -34,7 +31,8 @@ services:
     environment:
       - POSTGRES_DB=aip
       - POSTGRES_USER=postgres
-      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
 
 volumes:
   db_data:
+  tunnel_data:

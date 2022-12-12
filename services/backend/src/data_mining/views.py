@@ -1,34 +1,11 @@
 from django.views.decorators.cache import cache_page
-from neo4j.exceptions import AuthError, Neo4jError
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 
 from .hot_keywords import filter_keywords
-from .logic_neo import NeoDB
 from .logic_psql import get_authors_graph
-from .logic_psql import get_nodes_list_from_edges
 from .raw_db_access import get_keyword_publications
-
-
-@api_view(['GET'])
-def neo4j_test(request):
-    # This is an example of how Neo4j database can be used
-    try:
-        neo = NeoDB("neo4j://34.141.228.109:7687",
-                    user="viewer",
-                    password="123")
-        papers = neo.get_papers_cited_by_title(
-            "Computer architecture and high performance computing")
-
-    except AuthError:
-        return Response("Could not connect to the server",
-                        status=status.HTTP_401_UNAUTHORIZED)
-    except Neo4jError:
-        return Response("Could not retrieve the objects",
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    return Response(papers)
 
 
 @api_view(['GET'])
@@ -56,35 +33,6 @@ def hot_keywords(request):
 def authors_graph_psql(request):
     author_name = str(request.query_params.get('author_name'))
     res = get_authors_graph(author_name)
-
-    return handle_error_authors(res)
-
-
-@api_view(['GET'])
-def authors_graph_neo(request):
-    author_name = str(request.query_params.get('author_name'))
-    try:
-        neo = NeoDB("neo4j://34.141.228.109:7687",
-                    user="viewer",
-                    password="123")
-
-        citation_edges = neo.get_all_citations_authors(name=author_name)
-        citation_nodes = get_nodes_list_from_edges(citation_edges)
-
-        coauthorship_edges = neo.get_all_coauthorship_authors(name=author_name)
-        coauthorship_nodes = get_nodes_list_from_edges(coauthorship_edges)
-
-    except AuthError:
-        return Response("Could not connect to the server",
-                        status=status.HTTP_401_UNAUTHORIZED)
-    except Neo4jError:
-        return Response("Could not retrieve the objects",
-                        status=status.HTTP_400_BAD_REQUEST)
-
-    res = {"citation_nodes": citation_nodes, "citation_edges": citation_edges,
-           "coauthorship_nodes": coauthorship_nodes,
-           "coauthorship_edges": coauthorship_edges}
-
     return handle_error_authors(res)
 
 

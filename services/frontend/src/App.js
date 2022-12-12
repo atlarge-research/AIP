@@ -27,7 +27,7 @@ import Brightness7Icon from "@mui/icons-material/Brightness7";
 import GitHubIcon from "@mui/icons-material/GitHub";
 
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { createTheme, ThemeProvider, StyledEngineProvider, adaptV4Theme } from "@mui/material/styles";
+import { createTheme, ThemeProvider, StyledEngineProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 
 import Box from "@mui/material/Box";
