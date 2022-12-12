@@ -41,13 +41,3 @@ export const apiCallFilter = (
     method: "GET",
   });
 };
-
-export const apiCallRaw = (query) => {
-  let url = new URL(apiUrl + "raw-query");
-  url.searchParams.append("sql", query);
-
-  return fetch(url.href, {
-    headers: { "Content-Type": "application/json" },
-    method: "GET",
-  });
-};

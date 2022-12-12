@@ -1,3 +1,6 @@
+.env.*
+!.env.example
+
 .python-version
 
 # Byte-compiled / optimized / DLL files

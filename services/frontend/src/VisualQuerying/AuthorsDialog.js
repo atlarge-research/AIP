@@ -12,6 +12,7 @@ import {
   TableRow,
   TableCell,
   Paper,
+  Link
 } from "@mui/material";
 
 const AuthorsDialog = ({
@@ -49,12 +50,12 @@ const AuthorsDialog = ({
                   </TableCell>
                   <TableCell style={{ width: "200px" }}>
                     {row.orcid ? (
-                      <a
+                      <Link
                         href={"https://orcid.org/" + row.orcid}
                         target="__blank"
                       >
                         {row.orcid}
-                      </a>
+                      </Link>
                     ) : (
                       "-"
                     )}

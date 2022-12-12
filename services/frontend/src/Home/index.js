@@ -15,9 +15,9 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import moment from "moment";
-import RefreshIcon from "@mui/icons-material/Refresh";
-import { apiCall, apiCallFresh } from "./apiCalls";
-import pdf from "./update_instructions.pdf";
+// import RefreshIcon from "@mui/icons-material/Refresh";
+import { apiCall } from "./apiCalls";
+// import pdf from "./update_instructions.pdf";
 
 const useStyles = makeStyles({
   cards: {
@@ -79,64 +79,10 @@ const Home = () => {
     </Card>
   );
 
-  const [updateDescription, setUpdateDescription] = useState(null);
-  const [updateLoading, setUpdateLoading] = useState(false);
-  const checkUpdates = () => {
-    setUpdateLoading(true);
-    apiCallFresh()
-      .then((res) => res.json())
-      .then((desc) => {
-        setUpdateDescription(desc);
-      })
-      .catch((e) => {
-        setUpdateLoading(false);
-        console.error(e);
-      });
-  };
-
   return (
     <div>
       <Box my={3} display="flex" justifyContent="space-between">
         <Typography variant="h4">Home</Typography>
-        <Box display="flex">
-          {updateDescription && (
-            <Card>
-              <CardContent className={classes.descs}>
-                <Box display="flex" alignItems="center">
-                  <a
-                    href={pdf}
-                    target="__blank"
-                    style={{ marginRight: "12px" }}
-                  >
-                    <Button>Show update instructions</Button>
-                  </a>
-                  <Box>
-                    {updateDescription.map((desc, i) => (
-                      <Box key={i} className={classes.nop}>
-                        <Typography variant="body">{desc}</Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                </Box>
-              </CardContent>
-            </Card>
-          )}
-          {!updateDescription && (
-            <Tooltip
-              title="Check if database updates are available"
-              aria-label="updates"
-            >
-              <IconButton
-                variant="contained"
-                onClick={checkUpdates}
-                aria-label="updates"
-                disabled={updateLoading}
-                size="large">
-                <RefreshIcon className={updateLoading ? classes.rotate : ""} />
-              </IconButton>
-            </Tooltip>
-          )}
-        </Box>
       </Box>
       <Box display="flex" justifyContent="center" className={classes.cards}>
         {loading && !error && <LinearProgress />}
@@ -145,11 +91,11 @@ const Home = () => {
           <>
             {generateCard(
               "Number of the publications in the database",
-              info.publications_count[0]
+              info.publications_count
             )}
             {generateCard(
               "Number of the authors in the database",
-              info.authors_count[0]
+              info.authors_count
             )}
             {generateCard(
               "Date of last database update",
@@ -160,14 +106,14 @@ const Home = () => {
               info.db_schema_version
             )}
             {generateCard("Version of the database content", info.version)}
-            {generateCard(
-              "AMiner/MAG version release date",
-              info.aminer_mag_version
-            )}
             {generateCard("DBLP version release date", info.dblp_version)}
             {generateCard(
               "Semantic Scholar version release date",
               info.semantic_scholar_version
+            )}
+            {generateCard(
+              "AMiner/MAG version release date",
+              info.aminer_mag_version
             )}
           </>
         )}
@@ -179,38 +125,51 @@ const Home = () => {
         <Paper>
           <Box mx={2} pt={2}>
             <Typography variant="h6">
-              This application was developed by
+              This application is being maintained and improved by
+            </Typography>
+          </Box>
+          <List>
+            <ListItem>
+              <ListItemText
+                primary="Gilles Magalhães Ribeiro"
+                secondary="VU Amsterdam student"
+              />
+            </ListItem>
+          </List>
+          <Box mx={2} pt={2}>
+            <Typography variant="h6">
+              This application was initially created by
             </Typography>
           </Box>
           <List>
             <ListItem>
               <ListItemText
                 primary="Bianca-Maria Cosma"
-                secondary="Student of TU Delft"
+                secondary="TU Delft"
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="Przemysław Kowalewski"
-                secondary="Student of TU Delft"
+                secondary="TU Delft"
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="Oskar Lorek"
-                secondary="Student of TU Delft"
+                secondary="TU Delft"
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="Michał Okoń"
-                secondary="Student of TU Delft"
+                secondary="TU Delft"
               />
             </ListItem>
             <ListItem>
               <ListItemText
                 primary="Jakub Tokarz"
-                secondary="Student of TU Delft"
+                secondary="TU Delft"
               />
             </ListItem>
           </List>

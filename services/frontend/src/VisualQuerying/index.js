@@ -14,22 +14,17 @@ import { addFavouriteQuery } from "../FavouriteQueries/localStorageHelper";
 
 // Icons
 import FilterListIcon from "@mui/icons-material/FilterList";
-import BuildIcon from "@mui/icons-material/Build";
-import HelpIcon from "@mui/icons-material/Help";
-import InfoIcon from "@mui/icons-material/Info";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import SaveIcon from "@mui/icons-material/Save";
 
 import exportToCsv from "./exportToCsv";
-import { apiCallFilter, apiCallRaw } from "./apiCalls";
+import { apiCallFilter } from "./apiCalls";
 import defaultValues from "./filterDefaultValues";
 import Table from "./Table";
 import AbstractDialog from "./AbstractDialog";
 import FiltersDialog from "./FiltersDialog";
 import AuthorsDialog from "./AuthorsDialog";
-import RawQueryDialog from "./RawQueryDialog";
-import RawQueriesDialog from "./RawQueriesDialog";
 import FavouriteQueryDialog from "./FavouriteQueryDialog";
 import SchemaDialog from "./SchemaDialog";
 
@@ -50,10 +45,10 @@ const VisualQuerying = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [rawQuery, setRawQuery] = useState("");
-  const [rawQueryDialogOpened, setRawQueryDialogOpened] = useState(false);
-  const [rawQueryError, setRawQueryError] = useState("");
-  const [rawQueryExecuted, setRawQueryExecuted] = useState(false);
+  // const [rawQuery, setRawQuery] = useState("");
+  // const [rawQueryDialogOpened, setRawQueryDialogOpened] = useState(false);
+  // const [rawQueryError, setRawQueryError] = useState("");
+  // const [rawQueryExecuted, setRawQueryExecuted] = useState(false);
 
   const [filters, setFilters] = useState({ ...defaultValues });
 
@@ -73,14 +68,14 @@ const VisualQuerying = () => {
   const [querySaved, setQuerySaved] = useState(false);
   const saveCurrentQuery = (name) => {
     setQuerySaved(true);
-    if (rawQueryExecuted) {
-      addFavouriteQuery({
-        type: "sql",
-        queryName: name,
-        time: moment(),
-        query: rawQuery,
-      });
-    } else {
+    // if (rawQueryExecuted) {
+    //   addFavouriteQuery({
+    //     type: "sql",
+    //     queryName: name,
+    //     time: moment(),
+    //     query: rawQuery,
+    //   });
+    // } else {
       const specifiedFilters = {};
       for (let key in defaultValues) {
         if (
@@ -98,49 +93,49 @@ const VisualQuerying = () => {
         time: moment(),
         query: specifiedFilters,
       });
-    }
+    // }
   };
 
-  const onRawQuerySubmit = (query) => {
-    setRawQueryError("");
-    setRawQuery(query);
-    setLoading(true);
-    apiCallRaw(query)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-        setData(data);
-        setLoading(false);
-        setRawQueryExecuted(true);
-        setRawQueries(null);
-        setQuerySaved(false);
+  // const onRawQuerySubmit = (query) => {
+  //   setRawQueryError("");
+  //   setRawQuery(query);
+  //   setLoading(true);
+  //   apiCallRaw(query)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       console.log(data);
+  //       setData(data);
+  //       setLoading(false);
+  //       setRawQueryExecuted(true);
+  //       setRawQueries(null);
+  //       setQuerySaved(false);
 
-        if (initialRawQuery) setInitialRawQuery(null);
-      })
-      .catch((e) => {
-        console.error(e);
-        setRawQuery(null);
-        setLoading(false);
-        setRawQueryDialogOpened(true);
-        setRawQueryError(
-          "There was a problem executing your query. Please check your syntax."
-        );
-      });
-  };
+  //       if (initialRawQuery) setInitialRawQuery(null);
+  //     })
+  //     .catch((e) => {
+  //       console.error(e);
+  //       setRawQuery(null);
+  //       setLoading(false);
+  //       setRawQueryDialogOpened(true);
+  //       setRawQueryError(
+  //         "There was a problem executing your query. Please check your syntax."
+  //       );
+  //     });
+  // };
 
-  const [initialRawQuery, setInitialRawQuery] = useState(
-    location && location.state && location.state.rawQuery
-  );
+  // const [initialRawQuery, setInitialRawQuery] = useState(
+  //   location && location.state && location.state.rawQuery
+  // );
 
   useState(() => {
-    if (initialRawQuery) onRawQuerySubmit(initialRawQuery);
+    // if (initialRawQuery) onRawQuerySubmit(initialRawQuery);
     if (location && location.state && location.state.filterQuery)
       setFilters(location.state.filterQuery);
   }, []);
 
   // On every filter change refetch from the api
   useEffect(() => {
-    if (initialRawQuery) return;
+    // if (initialRawQuery) return;
     setLoading(true);
     apiCallFilter(page, pageSize, sort, filters)
       .then((res) => res.json())
@@ -149,9 +144,9 @@ const VisualQuerying = () => {
         setCount(data.count);
         setRawQueries(data.raw_query);
         setLoading(false);
-        setRawQueryExecuted(false);
+        // setRawQueryExecuted(false);
         setQuerySaved(false);
-        setRawQuery(null);
+        // setRawQuery(null);
       })
       .catch((e) => {
         console.error(e);
@@ -179,14 +174,14 @@ const VisualQuerying = () => {
         setShowFDQ={setShowFQD}
         onSave={saveCurrentQuery}
       />
-      <RawQueryDialog
+      {/* <RawQueryDialog
         query={rawQuery}
         setRawQuery={setRawQuery}
         opened={rawQueryDialogOpened}
         setOpened={setRawQueryDialogOpened}
         onSubmit={onRawQuerySubmit}
         error={rawQueryError}
-      />
+      /> */}
       <FiltersDialog
         filters={filters}
         setFilters={setFilters}
@@ -204,15 +199,15 @@ const VisualQuerying = () => {
         setShowAbstract={setShowAbstract}
         currentArticle={currentArticle}
       />
-      <RawQueriesDialog
+      {/* <RawQueriesDialog
         showRawQueries={showRawQueries}
         setShowRawQueries={setShowRawQueries}
         rawQueries={rawQueries}
-      />
+      /> */}
       <Box display="flex" justifyContent="space-between" my={3}>
         <Typography variant="h4">Visual Querying</Typography>
         <Box display="flex" alignItems="center">
-          <Tooltip title="Show schema of the database">
+          {/* <Tooltip title="Show schema of the database">
             <IconButton
               variant="contained"
               onClick={() => setShowSchema(true)}
@@ -220,8 +215,8 @@ const VisualQuerying = () => {
               size="large">
               <HelpIcon />
             </IconButton>
-          </Tooltip>
-          {rawQueries && (
+          </Tooltip> */}
+          {/* {rawQueries && (
             <Tooltip title="Show executed SQL Queries" aria-label="sql">
               <IconButton
                 variant="contained"
@@ -231,7 +226,7 @@ const VisualQuerying = () => {
                 <InfoIcon />
               </IconButton>
             </Tooltip>
-          )}
+          )} */}
           <IconButton
             variant="contained"
             onClick={() => setShowFQD(true)}
@@ -254,7 +249,8 @@ const VisualQuerying = () => {
               variant="contained"
               onClick={() => {
                 if (data.length && !loading)
-                  exportToCsv(data, rawQueryExecuted);
+                  exportToCsv(data, "");
+                  // exportToCsv(data, rawQueryExecuted);
               }}
               aria-label="export csv"
               disabled={!data.length || loading}
@@ -263,7 +259,7 @@ const VisualQuerying = () => {
             </IconButton>
           </Tooltip>
           <Box display="inline-flex" ml={3}>
-            <Tooltip title="Execute custom SQL query" aria-label="sql">
+            {/* <Tooltip title="Execute custom SQL query" aria-label="sql">
               <IconButton
                 variant="contained"
                 onClick={() => setRawQueryDialogOpened(true)}
@@ -271,7 +267,7 @@ const VisualQuerying = () => {
                 size="large">
                 <BuildIcon />
               </IconButton>
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip title="Filter the database" aria-label="filter">
               <IconButton
                 variant="contained"
@@ -289,7 +285,7 @@ const VisualQuerying = () => {
       ) : (
         <Table
           data={data}
-          rawQueryExecuted={rawQueryExecuted}
+          // rawQueryExecuted={""}
           sort={sort}
           setSort={setSort}
           page={page}
