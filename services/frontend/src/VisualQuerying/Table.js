@@ -9,8 +9,8 @@ import {
   TablePagination,
   TableSortLabel,
   Button,
-  useTheme,
   Link,
+  Stack,
 } from "@mui/material";
 import columns from "./columns";
 
@@ -79,12 +79,20 @@ const CustomTable = ({
                   ))}
                 <TableCell>
                   {row.doi ? (
-                    <Link
-                      href={"https://www.doi.org/" + row.doi}
-                      target="__blank"
-                    >
-                      {row.doi}
-                    </Link>
+                    <Stack direction="row" spacing={1} alignItems="center">
+                      <Link
+                        href={"https://www.doi.org/" + row.doi}
+                        target="__blank"
+                      >
+                        {row.doi}
+                      </Link>
+                      <Link
+                        href={"https://www.sci-hub.se/" + row.doi}
+                        target="__blank"
+                      >
+                        <img src="/ravenround.gif" height={24} width={24} alt="Sci-Hub" />
+                      </Link>
+                    </Stack>
                   ) : (
                     "-"
                   )}
