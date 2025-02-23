@@ -2,7 +2,7 @@ from datetime import date, datetime
 
 import lxml
 import lxml.html
-import lxml.html.clean
+import lxml_html_clean
 import psycopg2
 import xxhash
 from venue_mapper.venue_mapper import VenueMapper

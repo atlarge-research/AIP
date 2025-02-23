@@ -14,13 +14,14 @@ import parse_semantic_scholar
 from database_manager import DatabaseManager
 
 aip_name = "aip"
-file_location = "C:/Users/ktoka/Desktop/raw-data"
+file_location = "/mnt/c/Users/dkazemak/projects/aip_v2/AIP/raw_data"
 
 
 def process_file(path, db_file=aip_name):
-    if re.match(".*dblp[\w-]+\.xml", path):
+    print("Working on: ", path)
+    if re.match(".*dblp[\w-]*\.xml", path):
         return parse_dblp.parse(path, db_file)
-    elif "aminer_papers" in path:
+    elif "aminer" in path:
         start = time.time()
         ret = parse_aminer.parse_aminer_corpus_file(path, db_file, logger_disabled=True)
         print("Aminer parse time:", time.time() - start)
@@ -32,7 +33,8 @@ def process_file(path, db_file=aip_name):
         return ret
     elif "s2-corpus" in path:
         return parse_semantic_scholar.parse_semantic_scholar_corpus_file(path, db_file)
-
+    else: 
+        print("No match for:", path)
     return True  # Nothing that should be done.
 
 
@@ -51,7 +53,7 @@ def run(file_locations=file_location, db_name=aip_name):
         for name in files:
             if isfile(os.path.join(path, name)) and not name.endswith(("zip", "tar")):
                 file_path = os.path.join(path, name)
-                if re.match("dblp[\w-]+\.xml", name):
+                if re.match("dblp[\w-]*\.xml", name):
                     dblp_file = file_path
                 elif re.match("s2-corpus[\w-]+", name):
                     semantic_data_files.append(file_path)
