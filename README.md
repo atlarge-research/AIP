@@ -27,7 +27,7 @@ It is also important that you have a recent version of the database which can be
 $ docker compose up --build -d
 ```
 
-3. Access the application through your web browser by going to http://localhost:8000
+3. Access the application through your web browser by going to http://localhost:8000. Additionally, the backend of the server can be queried, see examples in `notebooks`.
    
 ### Useful tips
 
