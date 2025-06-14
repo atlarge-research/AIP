@@ -5,7 +5,7 @@ import pandas as pd
 
 nltk.download('stopwords')
 nltk.download('wordnet')
-nltk.download('punkt')
+nltk.download('punkt_tab')
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import CountVectorizer, TfidfTransformer
 from textblob import Word
@@ -81,9 +81,8 @@ additional_stop_words = ["abstract", "according", "achieve", "across",
 
 stop_words = set()
 stop_words.update(stopwords.words('english'))
-
-
 # stop_words.update(additional_stop_words)
+stop_words = list(stop_words)
 
 
 def create_df_for_query(database_connection, query, query_params=None):
@@ -164,7 +163,7 @@ def get_top_keywords_for_query(conn, corpus, article_query, num_keywords=10,
     tfidf_transformer.fit(word_count_vector)
 
     # Get index to feature names mapping
-    feature_names = cv.get_feature_names()
+    feature_names = cv.get_feature_names_out()
 
     # Helper functions as per the article mentioned above.
     def sort_coo(coo_matrix):
