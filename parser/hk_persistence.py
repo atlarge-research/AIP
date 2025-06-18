@@ -78,8 +78,7 @@ def get_tfidf_matrix(documents,
                                  min_df=min_df, max_df=max_df,
                                  max_features=max_features)
     keyword_matrix = vectorizer.fit_transform(documents)
-    feature_names = vectorizer.get_feature_names()
-    # vocabulary = vectorizer.vocabulary
+    feature_names = vectorizer.get_feature_names_out()    # vocabulary = vectorizer.vocabulary
     return keyword_matrix, feature_names
 
 
